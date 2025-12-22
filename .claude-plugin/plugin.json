@@ -1,21 +1,13 @@
 {
   "name": "project-multilevel-index",
-  "displayName": "Project Multi-level Index System",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "分形多级索引系统 - 受《哥德尔、埃舍尔、巴赫》启发的自指文档系统。自动维护 PROJECT_INDEX、FOLDER_INDEX 和文件头注释，实现代码与文档的完美同步。",
-  "longDescription": "A fractal self-referential documentation system for Claude Code. Automatically maintains three-level indices (PROJECT_INDEX.md, FOLDER_INDEX.md, file headers) with dependency analysis, Mermaid graphs, and auto-update hooks. Supports 10 programming languages with full i18n (zh-CN/en-US).",
   "author": {
     "name": "Claude Code Community",
-    "url": "https://github.com/Claudate/project-multilevel-index"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Claudate/project-multilevel-index.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Claudate/project-multilevel-index/issues"
+    "email": "noreply@claudate.dev"
   },
   "homepage": "https://github.com/Claudate/project-multilevel-index#readme",
+  "repository": "https://github.com/Claudate/project-multilevel-index",
   "license": "MIT",
   "keywords": [
     "claude-code-plugin",
@@ -33,36 +25,12 @@
     "javascript",
     "python"
   ],
-  "engines": {
-    "claude-code": ">=1.0.0"
-  },
-  "categories": [
-    "Documentation",
-    "Productivity",
-    "Visualization"
-  ],
   "skills": [
-    {
-      "name": "project-multilevel-index",
-      "path": "./skills/project-multilevel-index/SKILL.md",
-      "description": "当用户请求\"初始化索引\"、\"更新文档\"、\"生成依赖图\"或检测到文件结构性变更时，使用此技能维护分形自指文档系统"
-    }
+    "./skills/project-multilevel-index/"
   ],
   "commands": [
-    {
-      "name": "init-index",
-      "path": "./commands/init-index.md",
-      "description": "初始化项目的分形多级索引系统"
-    },
-    {
-      "name": "update-index",
-      "path": "./commands/update-index.md",
-      "description": "手动更新项目索引系统"
-    },
-    {
-      "name": "check-index",
-      "path": "./commands/check-index.md",
-      "description": "检查项目索引系统的完整性和一致性"
-    }
+    "./commands/init-index.md",
+    "./commands/update-index.md",
+    "./commands/check-index.md"
   ]
 }
