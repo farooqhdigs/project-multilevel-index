@@ -14,7 +14,7 @@
 
 **🌐 多平台代码文档自动化系统**
 
-Claude Code (完全自动) + Cursor/Windsurf/Kiro (半自动)
+Claude Code (完全自动) + VSCode/Cursor/Windsurf/Kiro (完全自动 - 即将支持)
 
 [简体中文](#) | [English](README_EN.md) | [📖 示例](examples/) | [ℹ️ 关于](ABOUT.md)
 
@@ -31,16 +31,27 @@ Claude Code (完全自动) + Cursor/Windsurf/Kiro (半自动)
 - ✅ **自动化**: 通过 Hook 系统自动更新索引
 - 📦 **安装位置**: `~/.claude/plugins/` (Claude Code 插件目录)
 
-**其他 AI 编辑器 - 实验性支持**:
+**VSCode 系编辑器 - 完全自动化 (开发中)**:
+- 🚀 **VSCode Extension** (v1.0 开发中) - 真正的全自动化
+  - ✅ **VSCode**: 原生支持
+  - ✅ **Cursor**: 完全兼容 VSCode 扩展
+  - ✅ **Windsurf**: 基于 VSCode,支持扩展
+  - ✅ **Kiro**: 基于 Code OSS,支持 Open VSX 扩展
+  - 📦 **安装方式**: VSCode Marketplace / Open VSX Registry
+  - 🔄 **工作原理**: FileSystemWatcher 自动监听文件变化
+  - 📅 **预计发布**: 2026-01-10
+
+**当前可用方案 (过渡期)**:
 - 🔧 **Cursor**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/cursor-example/)
 - 🔧 **Windsurf**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/windsurf-example/)
 - 🔧 **Kiro**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/kiro-example/)
-- ⏳ **VSCode**: 计划 v2.1 支持
 
 **说明**:
-- Claude Code 是唯一提供完全自动化的平台 (通过 Hook 系统)
-- 其他平台需要通过规则文件和手动提醒实现半自动化
-- 我们提供了完整的示例项目和配置文件,详见 [examples/](examples/) 目录
+- **Claude Code**: 完全自动化 (通过 Hook 系统) ✅ 已发布
+- **VSCode Extension**: 完全自动化 (通过 FileSystemWatcher) 🚧 开发中
+- **规则文件方案**: 半自动化 (过渡方案,VSCode 扩展发布后仍可使用)
+- 详见 [VSCODE_EXTENSION_PLAN.md](VSCODE_EXTENSION_PLAN.md) 了解技术方案
+- 详见 [IMPLEMENTATION_ROADMAP.md](IMPLEMENTATION_ROADMAP.md) 了解开发进度
 
 ---
 
