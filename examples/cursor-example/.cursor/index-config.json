@@ -1,0 +1,25 @@
+{
+  "autoUpdate": true,
+  "maxFileSize": 524288,
+  "excludePatterns": [
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    ".next",
+    "target",
+    "vendor",
+    "__pycache__",
+    ".cache",
+    "coverage",
+    ".turbo",
+    ".venv",
+    "venv",
+    "pnpm-store",
+    ".yarn"
+  ],
+  "language": "zh-CN",
+  "silentMode": true,
+  "generateMermaid": true,
+  "maxMermaidNodes": 50
+}

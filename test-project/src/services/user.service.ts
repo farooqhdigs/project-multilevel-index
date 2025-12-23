@@ -1,5 +1,23 @@
+/**
+ * Input: User, CreateUserDTO from ../models/User; Logger from ../utils/logger
+ * Output: UserService class (createUser/findById/findAll methods), EmailService class (sendWelcomeEmail method)
+ * Pos: Service Layer - User domain service with email notification capability
+ *
+ * 🔄 Self-reference: When this file changes, update:
+ * - This file header
+ * - src/services/FOLDER_INDEX.md
+ * - PROJECT_INDEX.md
+ */
+
 import { User, CreateUserDTO } from '../models/User';
 import { Logger } from '../utils/logger';
+
+// 新增依赖 - 这是一个结构性变更
+class EmailService {
+  static sendWelcomeEmail(email: string): void {
+    console.log(`Sending welcome email to: ${email}`);
+  }
+}
 
 export class UserService {
   private users: User[] = [];
@@ -15,6 +33,10 @@ export class UserService {
     };
 
     this.users.push(user);
+
+    // 发送欢迎邮件 - 使用新功能
+    EmailService.sendWelcomeEmail(user.email);
+
     return user;
   }
 

@@ -1,7 +1,7 @@
 /**
- * Input: None (type definitions only)
+ * Input: None (Data model definition)
  * Output: User interface, CreateUserDTO interface
- * Pos: Data Layer - User domain model, defines user entity structure
+ * Pos: Data Layer - User domain model, defines user structure
  *
  * 🔄 Self-reference: When this file changes, update:
  * - This file header
@@ -11,12 +11,15 @@
 
 export interface User {
   id: string;
-  name: string;
   email: string;
+  username: string;
+  passwordHash: string;
   createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CreateUserDTO {
-  name: string;
   email: string;
+  username: string;
+  password: string;
 }

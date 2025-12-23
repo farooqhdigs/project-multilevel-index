@@ -1,0 +1,175 @@
+# 平台适配器配置
+# 定义各平台的特性、触发机制和初始化流程
+
+platforms:
+  claude_code:
+    name: Claude Code
+    config_location: .claude-plugin/
+    trigger_mechanism: hooks_system
+    capabilities:
+      file_reference: true
+      auto_trigger: true
+      skill_system: true
+      marketplace: true
+    initialization:
+      - 使用现有插件系统
+      - 自动加载 Skills 和 Hooks
+      - 零配置即用
+    features:
+      - PostToolUse Hook 自动触发更新
+      - Skills 系统提供命令接口
+      - Marketplace 一键安装
+      - 完整的国际化支持
+    reference_syntax: "@path/to/file"
+    automation_level: full
+
+  cursor:
+    name: Cursor
+    config_location: .cursor/rules/
+    trigger_mechanism: embedded_reminders
+    capabilities:
+      file_reference: true
+      auto_trigger: false
+      rules_system: true
+      marketplace: false
+    initialization:
+      - 生成 .cursor/rules/ 文件
+      - 嵌入索引系统提醒规则
+      - 配置文件引用
+    features:
+      - 规则文件自动加载
+      - 依赖 AI 理解提醒触发更新
+      - 支持 @filename 文件引用
+      - 半自动化维护
+    reference_syntax: "@filename"
+    automation_level: semi_auto
+
+  kiro:
+    name: Kiro
+    config_location: .kiro/
+    trigger_mechanism: spec_based
+    capabilities:
+      file_reference: true
+      auto_trigger: false
+      spec_system: true
+      marketplace: false
+    initialization:
+      - 复制 specs/ 到项目 .kiro/
+      - 生成 steering/ 指导文件
+      - 配置 inclusion: always
+    features:
+      - Spec 驱动自动理解
+      - 使用 #[[file:path]] 引用
+      - inclusion: always 自动加载
+      - 提醒式半自动更新
+    reference_syntax: "#[[file:path]]"
+    automation_level: semi_auto
+
+  windsurf:
+    name: Windsurf
+    config_location: .windsurf/
+    trigger_mechanism: config_based
+    capabilities:
+      file_reference: false
+      auto_trigger: false
+      config_file: true
+      marketplace: false
+    initialization:
+      - 生成 .windsurf/config.json
+      - 静态内联索引内容
+      - 定义自动化工作流
+    features:
+      - 配置驱动触发
+      - 静态内联文档内容
+      - 简化的指令格式
+      - 手动命令触发
+    reference_syntax: null
+    automation_level: manual
+
+  cline:
+    name: Cline
+    config_location: .cline/
+    trigger_mechanism: task_based
+    capabilities:
+      file_reference: false
+      auto_trigger: false
+      task_system: true
+      marketplace: false
+    initialization:
+      - 生成任务定义文件
+      - 创建维护工作流
+      - 提供命令列表
+    features:
+      - 任务驱动更新
+      - 命令式操作
+      - 手动触发维护
+    reference_syntax: null
+    automation_level: manual
+
+  github_copilot:
+    name: GitHub Copilot
+    config_location: .github/
+    trigger_mechanism: instruction_file
+    capabilities:
+      file_reference: false
+      auto_trigger: false
+      instruction_file: true
+      marketplace: false
+    initialization:
+      - 生成 .github/copilot-instructions.md
+      - 内联核心指令
+      - 提供更新指南
+    features:
+      - 指令文件支持
+      - 静态规则定义
+      - 完全手动触发
+    reference_syntax: null
+    automation_level: manual
+
+  generic:
+    name: Generic (通用回退)
+    config_location: ./
+    trigger_mechanism: standalone_file
+    capabilities:
+      file_reference: false
+      auto_trigger: false
+      standalone: true
+      marketplace: false
+    initialization:
+      - 生成 AGENTS.md 文件
+      - 提供完整的使用说明
+      - 包含所有核心指令
+    features:
+      - 最大兼容性
+      - 纯文本指令
+      - 适用于任何 AI 编辑器
+      - 完全手动操作
+    reference_syntax: null
+    automation_level: manual
+
+# 自动化级别说明
+automation_levels:
+  full:
+    description: 完全自动化,无需用户干预
+    platforms: [claude_code]
+    trigger: Hook 系统自动监听文件变化
+
+  semi_auto:
+    description: 半自动化,依赖 AI 理解提醒
+    platforms: [cursor, kiro]
+    trigger: 文档内嵌提醒,AI 理解后执行
+
+  manual:
+    description: 手动触发,用户主动运行命令
+    platforms: [windsurf, cline, github_copilot, generic]
+    trigger: 用户手动执行更新命令
+
+# 平台优先级 (推荐实施顺序)
+priority:
+  - claude_code  # P0: 必须,作为参考实现
+  - cursor       # P1: 重要,最大用户群
+  - kiro         # P1: 重要,最强文件引用能力
+  - windsurf     # P2: 可选,新兴平台
+  - cline        # P3: 社区,作为社区贡献示例
+  - github_copilot  # P3: 社区
+  - generic      # P3: 社区,最大兼容性回退

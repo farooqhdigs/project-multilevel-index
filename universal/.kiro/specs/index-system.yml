@@ -1,0 +1,191 @@
+# Spec: 分形多级索引系统规格定义
+# Project: project-multilevel-index
+# Version: 2.1.0
+# Description: GEB 启发的分形自指文档系统,自动维护 PROJECT_INDEX、FOLDER_INDEX 和文件头注释
+
+name: project-multilevel-index
+version: 2.1.0
+description: |
+  分形多级索引系统 - 自我维护的文档系统
+  灵感来源: Douglas Hofstadter 的《哥德尔、艾舍尔、巴赫》
+
+  核心特性:
+  🔄 自我维护 - 文档包含自指提醒,触发 AI 自动更新
+  📁 分形结构 - 每个层级遵循相同模式
+  🛡️ 增量更新 - 先读后写规则防止覆盖
+  🤖 多编辑器 - 支持主流 AI 编辑器
+  🌍 双语 - 中文和英文
+
+# 核心概念
+concepts:
+  - name: 自相似性 (Self-Similarity)
+    description: 每个层级都有相同的索引结构 (PROJECT → FOLDER → FILE)
+    implementation: 三层索引系统,每层都包含架构说明和内容清单
+
+  - name: 自指性 (Self-Reference)
+    description: 每个文档都声明"当我变化时,更新我"
+    implementation: 在文档中嵌入更新提醒,触发 AI 自动执行
+
+  - name: 复调性 (Polyphony)
+    description: 代码与文档相互呼应,局部影响整体
+    implementation: 文件变化 → 更新头部 → 更新文件夹索引 → 更新项目索引
+
+# 索引结构定义
+structure:
+  project_index:
+    file: PROJECT_INDEX.md
+    location: project_root
+    sections:
+      - 项目概览 (3-5行简介)
+      - 架构说明 (分层设计)
+      - 目录结构 (树形展示)
+      - 依赖关系图 (Mermaid 可视化)
+    self_reference: "🔄 当项目结构变化时,更新此索引"
+    update_trigger: 新增/删除文件夹, 重大架构调整
+
+  folder_index:
+    file: FOLDER_INDEX.md
+    location: each_code_folder
+    sections:
+      - 架构说明 (3行描述本文件夹职责)
+      - 文件清单 (每个文件的 Input/Output/Pos)
+    self_reference: "🔄 当文件夹内容变化时,更新此索引"
+    update_trigger: 新增/删除文件, 文件依赖变化
+
+  file_header:
+    location: each_code_file
+    format: language_specific_comment
+    fields:
+      - name: Input
+        description: 依赖的外部内容 (imports, 数据源)
+      - name: Output
+        description: 对外提供的内容 (exports, API)
+      - name: Pos
+        description: 在系统中的定位 (架构层次, 职责)
+    self_reference: "🔄 我被更新时,更新我的注释和索引"
+    update_trigger: import/export 语句变化
+
+# 触发规则
+triggers:
+  structural_change:
+    description: 结构性变化,需要全面更新
+    keywords:
+      imports: [import, require, use, from, "#include", using, include_once]
+      exports: [export, public, class, interface, function, def, fn, func, struct, enum]
+    action: 更新文件头 + FOLDER_INDEX + PROJECT_INDEX
+
+  header_only_change:
+    description: 仅头部注释变化
+    detection: 文件头注释区域发生修改
+    action: 仅更新文件头注释
+
+  implementation_change:
+    description: 仅实现细节变化,无需更新
+    detection: 非 import/export, 非头部注释的修改
+    action: 跳过更新
+
+# 排除规则
+exclude:
+  directories:
+    - node_modules
+    - .git
+    - dist
+    - build
+    - target
+    - out
+    - bin
+    - obj
+    - .next
+    - .nuxt
+    - .cache
+    - coverage
+    - __pycache__
+
+  files:
+    - "*.min.js"
+    - "*.bundle.js"
+    - "*.map"
+    - "*.lock"
+    - package-lock.json
+    - yarn.lock
+    - Cargo.lock
+
+  use_gitignore: true
+  max_file_size: 512000  # 500KB
+
+# 支持的编程语言
+languages:
+  - name: JavaScript/TypeScript
+    extensions: [.js, .jsx, .ts, .tsx, .mjs, .cjs]
+    comment_style: jsdoc
+    template: javascript.md
+
+  - name: Python
+    extensions: [.py]
+    comment_style: docstring
+    template: python.md
+
+  - name: Java/Kotlin
+    extensions: [.java, .kt, .kts]
+    comment_style: javadoc
+    template: java.md
+
+  - name: Rust
+    extensions: [.rs]
+    comment_style: rustdoc
+    template: rust.md
+
+  - name: Go
+    extensions: [.go]
+    comment_style: single_line
+    template: go.md
+
+  - name: C/C++
+    extensions: [.c, .cpp, .cc, .cxx, .h, .hpp, .hxx]
+    comment_style: doxygen
+    template: cpp.md
+
+  - name: PHP
+    extensions: [.php]
+    comment_style: phpdoc
+    template: php.md
+
+  - name: Ruby
+    extensions: [.rb]
+    comment_style: rdoc
+    template: ruby.md
+
+  - name: Swift
+    extensions: [.swift]
+    comment_style: markup
+    template: swift.md
+
+  - name: C#
+    extensions: [.cs]
+    comment_style: xmldoc
+    template: csharp.md
+
+# 更新策略
+update_strategy:
+  read_before_write: true
+  preserve_user_content: true
+  incremental_update: true
+  batch_processing: true
+  silent_minor_updates: true
+  notify_major_changes: true
+
+# 依赖分析
+dependency_analysis:
+  max_depth: 5
+  include_third_party: false
+  circular_detection: true
+  visualize_with_mermaid: true
+  max_graph_nodes: 50
+
+# 国际化
+i18n:
+  default_language: zh-CN
+  supported_languages:
+    - zh-CN
+    - en-US
+  locale_config_path: .claude/locale-config.json

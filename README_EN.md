@@ -319,11 +319,60 @@ Full i18n support with dynamic language switching:
 
 ---
 
+## 🎬 Examples & Demos
+
+### Complete Example Projects
+
+We provide complete example projects for three platforms with actual code and configurations:
+
+- **[Cursor Example](examples/cursor-example/)** - Full TypeScript project example
+- **[Windsurf Example](examples/windsurf-example/)** - Windsurf configuration example
+- **[Kiro Example](examples/kiro-example/)** - Kiro configuration example
+
+Each example includes:
+- ✅ Complete project structure (Controllers/Services/Models/Utils)
+- ✅ Pre-configured rule files
+- ✅ Generated index files (PROJECT_INDEX, FOLDER_INDEX, file headers)
+- ✅ Detailed README and usage instructions
+
+### Real-World Use Cases
+
+Check **[USE_CASES.md](USE_CASES.md)** for 8 real-world application scenarios:
+
+1. **Open Source Project Documentation** - Lower contribution barrier, 100% doc sync rate
+2. **Enterprise Microservices** - Architecture visualization, circular dependency detection
+3. **Personal Learning Projects** - Track growth and architectural evolution
+4. **Technical Debt Refactoring** - Visualize tech debt, track refactoring progress
+5. **API Design Review** - API endpoint inventory at a glance
+6. **Multi-Team Collaboration** - Avoid duplicate development, increase reuse
+7. **Code Review Assistance** - Quickly understand change impact
+8. **Technical Documentation Generation** - Auto-generate API docs
+
+### Demo Videos (Coming Soon)
+
+📹 **Full Demo Video** - 2-minute overview of core features
+
+<!-- Will add video links after recording -->
+
+**Demo Content**:
+1. Initialize index (30s)
+2. Auto-update demo (30s)
+3. Dependency visualization (30s)
+4. Consistency check (15s)
+5. Language switching (15s)
+
+Refer to **[DEMO_SCRIPT.md](DEMO_SCRIPT.md)** for detailed demo scripts and recording guide.
+
+---
+
 ## 📚 Documentation
 
 - [**Installation Guide**](INSTALL_GUIDE.md) - Detailed setup instructions
 - [**Quick Start**](QUICKSTART.md) - Get up and running in 5 minutes
 - [**I18N Guide**](I18N_GUIDE.md) - Language configuration
+- [**Use Cases**](USE_CASES.md) - 8 real-world application scenarios
+- [**Demo Script**](DEMO_SCRIPT.md) - Recording guide for demos
+- [**Examples**](examples/) - Complete example projects
 - [**Contributing**](CONTRIBUTING.md) - How to contribute
 - [**Changelog**](CHANGELOG.md) - Version history
 - [**Bug Fixes**](BUG_FIXES_v1.0.2.md) - v1.0.2 fixes

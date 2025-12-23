@@ -1,13 +1,32 @@
 ---
 name: 项目多级索引系统
 description: 当用户请求"初始化索引"、"更新文档"、"生成依赖图"或检测到文件结构性变更时，使用此技能维护分形自指文档系统
-version: 2.0.0
+version: 2.1.0
 ---
 
 # 项目多级索引系统 (Project Multi-level Index)
 
+## 🏗️ 架构说明
+
+本技能现在采用 **双模式架构**:
+
+### 1. Claude Code 插件模式 (当前)
+- **位置**: `skills/project-multilevel-index/`
+- **用途**: Claude Code CLI 专属,通过插件系统使用
+- **特性**: Hooks 自动触发、插件市场分发
+
+### 2. Universal 通用模式 (多平台)
+- **位置**: `universal/`
+- **用途**: 支持 Claude Code、Cursor、Kiro、Windsurf 等多平台
+- **特性**: 平台无关的核心逻辑、适配器架构
+
+**关系**: 插件模式内部调用 universal/core/ 的通用逻辑,两者共享核心引擎。
+
+---
+
 ## 📚 快速导航
 
+### Claude Code 插件 (当前模式)
 - **核心概念**: [core/concepts.md](core/concepts.md)
 - **国际化**: [core/i18n.md](core/i18n.md)
 - **命令实现**:
@@ -15,6 +34,19 @@ version: 2.0.0
   - [/update-index](commands_impl/update-index.md) - 更新索引
   - [/check-index](commands_impl/check-index.md) - 一致性检查
   - [/set-language](commands_impl/set-language.md) - 切换语言
+
+### Universal 通用核心
+- **平台接口**: [../../universal/core/platform-interface.md](../../universal/core/platform-interface.md)
+- **分析器**: [../../universal/core/analyzer/](../../universal/core/analyzer/)
+  - [dependency-parser.md](../../universal/core/analyzer/dependency-parser.md) - 依赖分析
+  - [export-parser.md](../../universal/core/analyzer/export-parser.md) - 导出分析
+  - [position-inferrer.md](../../universal/core/analyzer/position-inferrer.md) - 位置推断
+- **生成器**: [../../universal/core/generator/](../../universal/core/generator/)
+  - [init-workflow.md](../../universal/core/generator/init-workflow.md) - 初始化工作流
+  - [update-workflow.md](../../universal/core/generator/update-workflow.md) - 更新工作流
+  - [check-workflow.md](../../universal/core/generator/check-workflow.md) - 检查工作流
+- **适配器**: [../../universal/adapters/](../../universal/adapters/)
+  - [claude-code/adapter.md](../../universal/adapters/claude-code/adapter.md) - Claude Code 适配器
 
 ---
 
@@ -27,10 +59,15 @@ version: 2.0.0
    - 读取 `.claude/locale-config.json`
    - 加载对应语言文件到 `LANG` 对象
 
-2. **执行具体命令**
-   - 根据用户请求调用对应命令文件
+2. **初始化 Claude Code 适配器**
+   - 加载 `universal/adapters/claude-code/adapter.md`
+   - 适配器提供平台特定的文件操作方法
 
-3. **输出结果**
+3. **调用 Universal 核心工作流**
+   - 传入适配器实例和语言配置
+   - 执行平台无关的核心逻辑
+
+4. **输出结果**
    - 使用 `LANG` 对象中的翻译文本
    - 替换占位符（如 `{directory}`, `{count}`）
 
@@ -44,14 +81,14 @@ version: 2.0.0
 
 **执行步骤**:
 1. 加载语言配置
-2. 确认项目根目录
-3. 扫描项目结构
-4. 生成文件头注释
-5. 生成 FOLDER_INDEX.md
-6. 生成 PROJECT_INDEX.md
-7. 输出总结报告
+2. 初始化 Claude Code 适配器
+3. **调用** `universal/core/generator/init-workflow.md`
+4. 适配器使用 Read/Write/Edit 工具执行文件操作
+5. 输出总结报告
 
 **详细实现**: [commands_impl/init-index.md](commands_impl/init-index.md)
+
+**核心工作流**: [../../universal/core/generator/init-workflow.md](../../universal/core/generator/init-workflow.md)
 
 ---
 
@@ -61,12 +98,15 @@ version: 2.0.0
 
 **执行步骤**:
 1. 加载语言配置
-2. 检测变更文件
-3. 分析变更类型（Structural / Header / Implementation）
-4. 执行增量更新
-5. 报告更新结果
+2. 初始化 Claude Code 适配器
+3. **调用** `universal/core/generator/update-workflow.md`
+4. 传入变更文件列表
+5. 适配器执行增量更新
+6. 报告更新结果
 
 **详细实现**: [commands_impl/update-index.md](commands_impl/update-index.md)
+
+**核心工作流**: [../../universal/core/generator/update-workflow.md](../../universal/core/generator/update-workflow.md)
 
 ---
 
@@ -76,12 +116,14 @@ version: 2.0.0
 
 **执行步骤**:
 1. 加载语言配置
-2. 检查文件头完整性
-3. 检查文件夹索引
-4. 检查依赖关系
+2. 初始化 Claude Code 适配器
+3. **调用** `universal/core/generator/check-workflow.md`
+4. 适配器执行完整性检查
 5. 生成检查报告
 
 **详细实现**: [commands_impl/check-index.md](commands_impl/check-index.md)
+
+**核心工作流**: [../../universal/core/generator/check-workflow.md](../../universal/core/generator/check-workflow.md)
 
 ---
 
@@ -190,6 +232,14 @@ version: 2.0.0
 
 ---
 
-**版本**: 2.0.0
-**更新日期**: 2025-12-22
-**新特性**: 模块化架构 + 国际化支持
+## 🔗 相关文档
+
+- **Universal 核心文档**: [../../universal/](../../universal/)
+- **适配器开发指南**: [../../universal/adapters/README.md](../../universal/adapters/README.md)
+- **平台对比**: [../../universal/.kiro/specs/platforms.yml](../../universal/.kiro/specs/platforms.yml)
+
+---
+
+**版本**: 2.1.0
+**更新日期**: 2025-12-23
+**新特性**: 双模式架构 + Universal 多平台核心 + 适配器系统
