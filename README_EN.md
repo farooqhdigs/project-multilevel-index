@@ -12,9 +12,11 @@
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-purple)](https://claude.ai/code)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**🔧 Claude Code Plugin** + 🎯 **Multi-Platform Examples** (Cursor/Windsurf/Kiro)
+**🌐 Multi-Platform Code Documentation Automation System**
 
-[English](#) | [简体中文](README.md) | [📖 View Examples](examples/)
+Claude Code (Full Auto) + Cursor/Windsurf/Kiro (Semi-Auto)
+
+[English](#) | [简体中文](README.md) | [📖 Examples](examples/) | [ℹ️ About](ABOUT.md)
 
 </div>
 
@@ -22,7 +24,12 @@
 
 ## 🎯 What is This?
 
-This is a **Claude Code plugin** that automatically maintains a three-level fractal documentation system for your codebase:
+**Fractal Multi-level Index System** - A code documentation automation system usable across multiple AI editor platforms:
+
+- 🏠 **Claude Code**: Full automation support (primary platform)
+- 🔧 **Cursor/Windsurf/Kiro**: Semi-automatic support (experimental)
+
+This system automatically maintains a three-level fractal documentation structure for your codebase:
 
 ```
 PROJECT_INDEX.md (Root Index)

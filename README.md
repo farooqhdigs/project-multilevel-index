@@ -12,9 +12,11 @@
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-purple)](https://claude.ai/code)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**🔧 Claude Code 插件** + 🎯 **多平台示例** (Cursor/Windsurf/Kiro)
+**🌐 多平台代码文档自动化系统**
 
-[简体中文](#) | [English](README_EN.md) | [📖 查看示例](examples/)
+Claude Code (完全自动) + Cursor/Windsurf/Kiro (半自动)
+
+[简体中文](#) | [English](README_EN.md) | [📖 示例](examples/) | [ℹ️ 关于](ABOUT.md)
 
 </div>
 
@@ -43,6 +45,11 @@
 ---
 
 ## 📖 核心理念
+
+**分形多级索引系统** - 一个可在多个 AI 编辑器平台使用的代码文档自动化系统:
+
+- 🏠 **Claude Code**: 完整自动化支持 (主平台)
+- 🔧 **Cursor/Windsurf/Kiro**: 半自动化支持 (实验性)
 
 这是一个三级分形文档系统，自动维护项目的索引和依赖关系：
 
