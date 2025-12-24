@@ -14,34 +14,27 @@
 
 **🌐 Multi-Platform Code Documentation Automation System**
 
-Claude Code (Full Auto) + Cursor/Windsurf/Kiro (Semi-Auto)
+CLI Tool + Claude Code Plugin + VSCode Extension (In Development)
 
-[English](#) | [简体中文](README.md) | [📖 Examples](examples/) | [ℹ️ About](ABOUT.md)
+[English](#) | [简体中文](README.md) | [📖 Documentation](#-documentation-navigation)
 
 </div>
 
 ---
 
-## 🎯 What is This?
+## 📖 Core Concept
 
-**Fractal Multi-level Index System** - A code documentation automation system with multiple deployment options:
-
-- 🎯 **CLI Tool (codex)**: Standalone command-line tool (✅ Released)
-- 🏠 **Claude Code Plugin**: Full automation via Hook system (✅ Released)
-- 🚀 **VSCode Extension**: Full automation via FileSystemWatcher (🚧 In Development)
-- 🔧 **Rules-based**: Semi-automatic for Cursor/Windsurf/Kiro (✅ Available)
-
-This system automatically maintains a three-level fractal documentation structure for your codebase:
+**Three-Level Fractal Documentation System** - Automatically maintains project indexes and dependencies:
 
 ```
 PROJECT_INDEX.md (Root Index)
   ├─ Project overview & architecture
-  ├─ Directory structure navigation
+  ├─ Directory structure
   └─ Mermaid dependency graph
 
 Each Folder/
   └─ FOLDER_INDEX.md (Folder Index)
-       ├─ 3-line architecture description
+       ├─ Architecture description
        ├─ File manifest
        └─ "Update me when this folder changes"
 
@@ -59,511 +52,218 @@ Each File
 - **🪞 Self-Reference**: Each document declares "update me when I change"
 - **🎼 Polyphony**: Code and documentation echo each other; local changes affect the whole
 
-### 🌍 v2.0 New Features
-
-- **Complete I18N**: Support for Chinese/English language switching
-- **Modular Architecture**: SKILL.md streamlined from 1098 to 200 lines
-- **Independent Commands**: Each command has detailed implementation docs
-- **New Command**: `/set-language` for quick language switching
-- **Multi-Platform Examples**: Complete examples for Cursor/Windsurf/Kiro
-- **Use Cases**: 8 real-world application scenarios
-- **Demo Materials**: Complete demo recording guide
-
 ---
 
-## ⚡ Quick Start
+## 🚀 Quick Start
 
-### Method 1: CLI Tool `codex` (Works Everywhere)
+### Method 1: CLI Tool `codex` (Recommended for CI/CD)
 
-**🎯 Standalone command-line tool** - Works independently of any editor, perfect for CI/CD:
-
-#### Installation
+**Standalone command-line tool** - Works independently of any editor:
 
 ```bash
-# 1. Clone repository
+# 1. Clone and install
 git clone https://github.com/Claudate/project-multilevel-index.git
 cd project-multilevel-index/cli
+npm install && npm run build && npm link
 
-# 2. Install dependencies and build
-npm install && npm run build
-
-# 3. Link globally
-npm link
-
-# 4. Verify installation
-codex --help
-```
-
-#### Usage
-
-```bash
-# Initialize index system
+# 2. Use it
 cd /your/project
 codex init
-
-# Custom options
-codex init --max-depth 5 --max-nodes 30
 ```
 
-#### Features
-
-- ✅ **10+ Languages**: JavaScript/TypeScript, Python, Java, Rust, Go, C/C++, PHP, Ruby, Swift
-- ✅ **Smart Analysis**: Babel AST for JS/TS, regex for other languages
-- ✅ **Complete Generation**: File headers + FOLDER_INDEX.md + PROJECT_INDEX.md + Mermaid graph
-- ✅ **User-Friendly**: Colorful output, progress bars, clear error messages
-- ✅ **CI/CD Ready**: Easy integration into automation workflows
-
-#### Output Example
-
+**Output Example**:
 ```
 🎼 Fractal Multi-level Index System
-
-Project root: /your/project
-
 ✔ Found 45 code files
-✔ Analyzed 45 files
 ✔ Generated 45 file headers
 ✔ Generated 8 folder indexes
 ✔ Generated PROJECT_INDEX.md
-
 ✅ Index system initialized successfully!
-
-📖 View the project index at: /your/project/PROJECT_INDEX.md
 ```
 
-📖 **Full Documentation**: [CLI README](cli/README.md) | [Implementation Details](CLI_IMPLEMENTATION.md)
+📖 [CLI Full Documentation](cli/README.md) | [Implementation Details](CLI_IMPLEMENTATION.md)
 
 ---
 
-### Method 2: Claude Code Marketplace (For Claude Code Users)
+### Method 2: Claude Code Plugin (Recommended for Claude Code)
 
-**The easiest way** - just two commands:
+**Easiest installation**:
 
 ```bash
 /plugin marketplace add Claudate/project-multilevel-index
 /plugin install project-multilevel-index
 ```
 
-Done! The plugin will auto-download to `~/.claude/plugins/project-multilevel-index`
-
-**Verify Installation**:
-```bash
-/plugins list
-```
-
-You should see `project-multilevel-index` enabled ✅
-
----
-
-### Method 3: Manual Installation from GitHub (For Developers)
-
-If you need to modify the plugin source code or contribute:
+**Usage**:
 
 ```bash
-git clone https://github.com/Claudate/project-multilevel-index.git
-cd project-multilevel-index
-
-# Windows (PowerShell)
-Copy-Item -Path . -Destination "$env:USERPROFILE\.claude\plugins\project-multilevel-index" -Recurse
-
-# macOS/Linux
-cp -r . ~/.claude/plugins/project-multilevel-index
-```
-
-**Plugin Directory Locations**:
-- Windows: `%USERPROFILE%\.claude\plugins\`
-- macOS/Linux: `~/.claude/plugins/`
-
-📖 **Detailed Guide**: [INSTALL_GUIDE.md](INSTALL_GUIDE.md) | **5-Minute Start**: [QUICKSTART.md](QUICKSTART.md)
-
----
-
-### Start Using - Initialize Your Project
-
-In your project root directory:
-
-```
+# Initialize index
 /project-multilevel-index:init-index
+
+# Auto-update (Hook triggers automatically)
+# Indexes auto-update when you modify code
 ```
 
-> **⚠️ Important**: Commands require the plugin namespace prefix `/project-multilevel-index:`, not just `/init-index`
-
-That's it! The plugin will:
-- ✅ Scan all code files (10 languages supported)
-- ✅ Generate file header comments with Input/Output/Pos
-- ✅ Create FOLDER_INDEX.md in each directory
-- ✅ Generate PROJECT_INDEX.md with dependency graph
-- ✅ Auto-update on file changes (via Hook)
+📖 [Installation Guide](INSTALL_GUIDE.md) | [Quick Start](QUICKSTART.md)
 
 ---
 
-## 🌟 Features
+### Method 3: VSCode Extension (In Development)
 
-### Automatic Updates
+**Full automation solution** - Expected release: 2026-01-10
 
-Once initialized, the index auto-updates whenever you modify code files (via PostToolUse Hook).
+Supported platforms:
+- ✅ VSCode
+- ✅ Cursor
+- ✅ Windsurf
+- ✅ Kiro
 
-**No manual work needed!**
+📖 [Technical Design](VSCODE_EXTENSION_PLAN.md) | [Development Roadmap](IMPLEMENTATION_ROADMAP.md)
 
-### 10 Programming Languages
+---
 
-- JavaScript/TypeScript (`.js`, `.jsx`, `.ts`, `.tsx`)
-- Python (`.py`)
-- Java/Kotlin (`.java`, `.kt`)
-- Rust (`.rs`)
-- Go (`.go`)
-- C/C++ (`.c`, `.cpp`, `.h`, `.hpp`)
-- PHP (`.php`)
-- Ruby (`.rb`)
-- Swift (`.swift`)
-- C# (`.cs`)
+## ⭐ Core Features
 
-### Smart Dependency Analysis
+### 🤖 Automated Indexing
 
-Automatically detects:
-- Import statements (`import`, `require`, `use`, `#include`)
-- Export declarations (`export`, `public`, `class`, `function`)
-- Circular dependencies (with warnings)
+- ✅ **Auto-scan**: Recursively scan all code files in project
+- ✅ **Smart Analysis**: AST or regex-based dependency analysis
+- ✅ **Auto-generate**: File headers + folder indexes + project index
+- ✅ **Auto-update**: Update related indexes when files change (Claude Code)
 
-### Mermaid Visualization
+### 🌍 10+ Programming Languages
 
-Generated dependency graphs render beautifully on:
+JavaScript/TypeScript • Python • Java/Kotlin • Rust • Go
+C/C++ • PHP • Ruby • Swift • C#
+
+📖 [File Header Examples](FILE_HEADERS.md)
+
+### 📊 Dependency Visualization
+
+```mermaid
+graph TB
+    Controllers -->|calls| Services
+    Services -->|uses| Models
+    Services -->|uses| Utils
+```
+
+Auto-generate Mermaid dependency graphs, supporting:
 - GitHub
-- VSCode (with Mermaid extension)
+- VSCode (Mermaid extension)
 - Obsidian
-- Any Markdown viewer with Mermaid support
+- Any Markdown viewer
 
 ---
 
-## 🚀 Commands
+## 📚 Command Quick Reference
 
-> **💡 All commands require the namespace prefix**: `/project-multilevel-index:` (this is a Claude Code plugin requirement)
+| Command | Function |
+|---------|----------|
+| [`init-index`](COMMANDS.md#1-init-index---initialize-index-system) | Initialize index system |
+| [`update-index`](COMMANDS.md#2-update-index---update-index) | Manual index update |
+| [`check-index`](COMMANDS.md#3-check-index---consistency-check) | Consistency check |
+| [`set-language`](COMMANDS.md#4-set-language---switch-language) | Switch language |
 
-### `/project-multilevel-index:init-index` - Initialize Index System
+> **💡 Tip**: Claude Code commands require prefix `/project-multilevel-index:`
 
-First-time setup or full rebuild.
-
-```
-/project-multilevel-index:init-index
-```
-
-**What it does**:
-1. Scans project structure
-2. Generates file header comments
-3. Creates FOLDER_INDEX.md files
-4. Generates PROJECT_INDEX.md with Mermaid graph
-5. Outputs summary report
-
-### `/project-multilevel-index:update-index` - Update Index
-
-Manual refresh after changes.
-
-```
-/project-multilevel-index:update-index
-```
-
-**What it does**:
-1. Detects file changes
-2. Re-analyzes dependencies
-3. Updates affected indices
-4. Reports what changed
-
-### `/project-multilevel-index:check-index` - Consistency Check
-
-Verify index integrity.
-
-```
-/project-multilevel-index:check-index
-```
-
-**What it checks**:
-1. ✅ File header completeness
-2. ✅ Folder index consistency
-3. ✅ Circular dependencies
-4. ✅ Missing or orphaned files
-5. ✅ Structural compliance
-
-### `/project-multilevel-index:set-language` - Switch UI Language
-
-Change interface language.
-
-```
-/project-multilevel-index:set-language
-```
-
-Choose between:
-- 简体中文 (zh-CN)
-- English (en-US)
+📖 [Command Details](COMMANDS.md)
 
 ---
 
-## 📖 Example Output
+## 🎯 Use Cases
 
-### File Header Comment (TypeScript)
+Check **[USE_CASES.md](USE_CASES.md)** for 8 real-world application scenarios:
 
+1. **Open Source Project Documentation** - Lower contribution barrier
+2. **Enterprise Microservices** - Architecture visualization
+3. **Personal Learning Projects** - Track growth process
+4. **Technical Debt Refactoring** - Track refactoring progress
+5. **API Design Review** - API endpoint inventory at a glance
+6. **Multi-Team Collaboration** - Avoid duplicate development
+7. **Code Review Assistance** - Quickly understand change impact
+8. **Technical Documentation** - Auto-generate API docs
+
+---
+
+## 🗺️ Platform Support
+
+| Platform | Automation | Status | Documentation |
+|----------|-----------|--------|--------------|
+| **CLI Tool** | Manual command | ✅ Released | [CLI README](cli/README.md) |
+| **Claude Code** | Full Auto | ✅ Released | [Install Guide](INSTALL_GUIDE.md) |
+| **VSCode Extension** | Full Auto | 🚧 In Dev | [Technical Design](VSCODE_EXTENSION_PLAN.md) |
+| **Rules-based** | Semi-Auto | ✅ Available | [Cursor](examples/cursor-example/) \| [Windsurf](examples/windsurf-example/) \| [Kiro](examples/kiro-example/) |
+
+📖 [Platform Comparison](PLATFORM_SUPPORT.md)
+
+---
+
+## 📖 Documentation Navigation
+
+### Quick Start
+- [Installation Guide](INSTALL_GUIDE.md) - Detailed installation steps
+- [Quick Start](QUICKSTART.md) - Get started in 5 minutes
+- [Usage Examples](EXAMPLES.md) - Complete usage examples
+
+### Core Documentation
+- [Command Reference](COMMANDS.md) - Detailed command descriptions
+- [Platform Support](PLATFORM_SUPPORT.md) - Platform comparison and selection
+- [File Header Examples](FILE_HEADERS.md) - File header templates for 10+ languages
+
+### Advanced Topics
+- [I18N Guide](I18N_GUIDE.md) - Language switching and configuration
+- [Use Cases](USE_CASES.md) - 8 real-world application scenarios
+- [Demo Script](DEMO_SCRIPT.md) - Complete demo recording guide
+
+### Developers
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute
+- [CLI Implementation](CLI_IMPLEMENTATION.md) - CLI tool technical details
+- [VSCode Extension Plan](VSCODE_EXTENSION_PLAN.md) - VSCode extension technical design
+- [Development Roadmap](IMPLEMENTATION_ROADMAP.md) - Overall development progress
+
+---
+
+## 📝 File Header Examples
+
+### TypeScript
 ```typescript
 /**
- * Input: bcrypt, ./models/User, ./utils/logger
- * Output: createUser(), authenticateUser(), UserService class
- * Pos: Business Layer - User Authentication Service
+ * Input: express, bcrypt, ./models/User
+ * Output: router, POST /login, POST /register
+ * Pos: API Layer - Authentication routes
  *
- * This comment auto-updates when the file is modified, triggering
- * FOLDER_INDEX and PROJECT_INDEX updates.
+ * This comment auto-updates when file is modified
  */
-
-import bcrypt from 'bcrypt';
-import { User } from './models/User';
-import { logger } from './utils/logger';
-
-export class UserService {
-  // ...
-}
 ```
 
-### FOLDER_INDEX.md Example
+### Python
+```python
+"""
+Input: flask, sqlalchemy, .models.User
+Output: UserController class, /api/users routes
+Pos: API Layer - User controller for HTTP requests
 
-```markdown
-# src/services Folder Index
-
-## Architecture
-
-Business logic layer encapsulating core business rules and data access.
-Uses service pattern with each service corresponding to a business domain.
-
-## File Manifest
-
-### userService.ts
-- **Role**: Core user management service
-- **Function**: User CRUD, authentication, authorization
-- **Dependencies**: database, logger, User model
-- **Used By**: userController, authMiddleware
-
-### authService.ts
-- **Role**: Authentication & authorization service
-- **Function**: JWT generation, token validation, login/logout
-- **Dependencies**: userService, config, bcrypt
-- **Used By**: authController, authMiddleware
-
----
-⚠️ **Self-Reference**: Update this index when folder contents change
+This comment auto-updates when file is modified
+"""
 ```
+
+📖 [View All Language Examples](FILE_HEADERS.md)
 
 ---
 
-## 🔧 Configuration
+## 🎬 Complete Example Projects
 
-### Disable Auto-Update
+We provide complete example projects for three platforms:
 
-Edit `hooks/hooks.json` and remove the `PostToolUse` Hook configuration.
-
-### Customize Exclude Patterns
-
-Currently excludes:
-- `node_modules`, `.git`, `dist`, `build`, `.next`
-- `target`, `vendor`, `__pycache__`, `.cache`
-- `coverage`, `.turbo`, `.venv`, `pnpm-store`, `.yarn`
-
-**Note**: Custom exclude patterns will be supported in v2.0 via `.claude/index-config.json`
-
----
-
-## 🌍 Internationalization
-
-Full i18n support with dynamic language switching:
-
-**Switch Language**:
-```
-/project-multilevel-index:set-language
-```
-
-**Or manually** create `.claude/locale-config.json`:
-```json
-{
-  "language": "en-US",
-  "fallback": "zh-CN"
-}
-```
-
-**Supported Languages**:
-- 🇨🇳 简体中文 (zh-CN) - Default
-- 🇺🇸 English (en-US)
-
-📖 Full guide: [I18N_GUIDE.md](I18N_GUIDE.md)
-
----
-
-## 🎬 Examples & Demos
-
-### Complete Example Projects
-
-We provide complete example projects for three platforms with actual code and configurations:
-
-- **[Cursor Example](examples/cursor-example/)** - Full TypeScript project example
-- **[Windsurf Example](examples/windsurf-example/)** - Windsurf configuration example
-- **[Kiro Example](examples/kiro-example/)** - Kiro configuration example
+- **[Cursor Example](examples/cursor-example/)** - Full TypeScript project
+- **[Windsurf Example](examples/windsurf-example/)** - Windsurf configuration
+- **[Kiro Example](examples/kiro-example/)** - Kiro configuration
 
 Each example includes:
 - ✅ Complete project structure (Controllers/Services/Models/Utils)
 - ✅ Pre-configured rule files
-- ✅ Generated index files (PROJECT_INDEX, FOLDER_INDEX, file headers)
-- ✅ Detailed README and usage instructions
-
-### Real-World Use Cases
-
-Check **[USE_CASES.md](USE_CASES.md)** for 8 real-world application scenarios:
-
-1. **Open Source Project Documentation** - Lower contribution barrier, 100% doc sync rate
-2. **Enterprise Microservices** - Architecture visualization, circular dependency detection
-3. **Personal Learning Projects** - Track growth and architectural evolution
-4. **Technical Debt Refactoring** - Visualize tech debt, track refactoring progress
-5. **API Design Review** - API endpoint inventory at a glance
-6. **Multi-Team Collaboration** - Avoid duplicate development, increase reuse
-7. **Code Review Assistance** - Quickly understand change impact
-8. **Technical Documentation Generation** - Auto-generate API docs
-
-### Demo Videos (Coming Soon)
-
-📹 **Full Demo Video** - 2-minute overview of core features
-
-<!-- Will add video links after recording -->
-
-**Demo Content**:
-1. Initialize index (30s)
-2. Auto-update demo (30s)
-3. Dependency visualization (30s)
-4. Consistency check (15s)
-5. Language switching (15s)
-
-Refer to **[DEMO_SCRIPT.md](DEMO_SCRIPT.md)** for detailed demo scripts and recording guide.
-
----
-
-## 📚 Documentation
-
-- [**Installation Guide**](INSTALL_GUIDE.md) - Detailed setup instructions
-- [**Quick Start**](QUICKSTART.md) - Get up and running in 5 minutes
-- [**I18N Guide**](I18N_GUIDE.md) - Language configuration
-- [**Use Cases**](USE_CASES.md) - 8 real-world application scenarios
-- [**Demo Script**](DEMO_SCRIPT.md) - Recording guide for demos
-- [**Examples**](examples/) - Complete example projects
-- [**Contributing**](CONTRIBUTING.md) - How to contribute
-- [**Changelog**](CHANGELOG.md) - Version history
-- [**Bug Fixes**](BUG_FIXES_v1.0.2.md) - v1.0.2 fixes
-
----
-
-## 🐛 Troubleshooting
-
-### Hook Not Triggering?
-
-1. Check Hook is enabled: `cat ~/.claude/plugins/project-multilevel-index/hooks/hooks.json`
-2. Verify file extension is supported (must be a code file)
-3. Ensure file is not in excluded directory
-
-### Index Out of Sync?
-
-Run a manual update:
-```
-/project-multilevel-index:update-index
-```
-
-Or full rebuild:
-```
-/project-multilevel-index:init-index
-```
-
-### Language Not Switching?
-
-1. Check `.claude/locale-config.json` exists
-2. Verify JSON syntax is valid
-3. Restart Claude Code
-
----
-
-## 🗺️ Roadmap
-
-### v2.0 (Planned)
-- [ ] Command-line parameters (`--force`, `--lang`, `--exclude`)
-- [ ] Configuration file support (`.claude/index-config.json`)
-- [ ] Auto-fix feature (`--fix`)
-- [ ] Report export (`--report json/md`)
-
-### v2.1 (Future)
-- [ ] VSCode extension (may work with Cursor)
-- [ ] More languages (Dart, Elixir, Scala)
-- [ ] Standalone CLI tool
-- [ ] LSP integration
-
-### v3.0 (Vision)
-- [ ] AI-powered refactoring suggestions
-- [ ] Interactive dependency browser
-- [ ] Architecture evolution timeline
-- [ ] Team collaboration features
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Code of Conduct
-- Development setup
-- Pull request process
-- Coding standards
-
-**Quick Links**:
-- [Issue Tracker](https://github.com/Claudate/project-multilevel-index/issues)
-- [Discussions](https://github.com/Claudate/project-multilevel-index/discussions)
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-**Summary**: You can use, modify, and distribute this plugin freely, even commercially.
-
----
-
-## 🙏 Acknowledgments
-
-- **Inspiration**: "Gödel, Escher, Bach: An Eternal Golden Braid" by Douglas Hofstadter
-- **Platform**: Claude Code by Anthropic
-- **Community**: Early adopters and contributors
-
----
-
-## ⚠️ Important Notes
-
-### Platform Support
-
-**Primary Platform - Claude Code**:
-- ✅ **Full Support**: https://claude.ai/code
-- ✅ **Automation**: Auto-updates via Hook system
-- 📦 **Installation**: `~/.claude/plugins/` (Claude Code plugin directory)
-
-**Other AI Editors - Experimental Support**:
-- 🔧 **Cursor**: Semi-automatic (manual AI prompting required) - [See Example](examples/cursor-example/)
-- 🔧 **Windsurf**: Semi-automatic (manual AI prompting required) - [See Example](examples/windsurf-example/)
-- 🔧 **Kiro**: Semi-automatic (manual AI prompting required) - [See Example](examples/kiro-example/)
-- ⏳ **VSCode**: Planned for v2.1
-
-**Notes**:
-- Claude Code is the only platform with full automation (via Hook system)
-- Other platforms use rule files and manual prompting for semi-automation
-- We provide complete example projects and configs, see [examples/](examples/) directory
-
-### Performance
-
-| Project Size | Init Time | Update Time |
-|-------------|-----------|-------------|
-| Small (<100 files) | <10s | <2s |
-| Medium (100-500) | <30s | <5s |
-| Large (500-1000) | <2min | <10s |
-| Huge (1000+) | <5min | <30s |
-
-### File Size Limit
-
-Files >500KB are skipped for performance. Adjust in future versions via config.
+- ✅ Generated index files
+- ✅ Detailed usage instructions
 
 ---
 
@@ -571,7 +271,7 @@ Files >500KB are skipped for performance. Adjust in future versions via config.
 
 ### WeChat Group
 
-Scan the QR code to join our WeChat group and connect with other users:
+Scan the QR code to join our WeChat group:
 
 <div align="center">
 
@@ -579,24 +279,39 @@ Scan the QR code to join our WeChat group and connect with other users:
 
 </div>
 
-For more community resources, see: [COMMUNITY.md](COMMUNITY.md)
+📖 [More Community Resources](COMMUNITY.md)
 
 ### GitHub
 
-- 📋 [Issues](https://github.com/Claudate/project-multilevel-index/issues) - Bug reports and feature requests
+- 📋 [Issues](https://github.com/Claudate/project-multilevel-index/issues) - Report issues
 - 💬 [Discussions](https://github.com/Claudate/project-multilevel-index/discussions) - Q&A and discussions
 - 🤝 [Contributing](CONTRIBUTING.md) - Contribution guidelines
 
 ---
 
-<div align="center">
+## 🎓 Inspiration
 
-**Made with ❤️ by the Claude Code Community**
+Inspired by Douglas Hofstadter's "Gödel, Escher, Bach: An Eternal Golden Braid":
 
-**⭐ Star us on [GitHub](https://github.com/Claudate/project-multilevel-index) if you find this useful!**
+- **Self-Reference**: Documents point to themselves, declaring "update me"
+- **Recursion**: Index of indexes of indexes...
+- **Strange Loop**: Code → Documentation → Code infinite loop
+- **Fractal**: Each level is a miniature of the whole
 
-</div>
+**Let your code projects become like fugues – self-referential, self-maintaining, elegantly harmonious!** 🎼
 
 ---
 
-**Let your code projects become like fugues – self-referential, self-maintaining, elegantly harmonious!** 🎼
+## 📜 License
+
+MIT License - Free to use, modify, and distribute
+
+---
+
+<div align="center">
+
+**Start with `/project-multilevel-index:init-index` to experience the fractal documentation system!** 🚀
+
+[⬆️ Back to Top](#project-multi-level-index-system)
+
+</div>

@@ -14,70 +14,17 @@
 
 **🌐 多平台代码文档自动化系统**
 
-Claude Code (完全自动) + VSCode/Cursor/Windsurf/Kiro (完全自动 - 即将支持)
+CLI工具 + Claude Code插件 + VSCode扩展(开发中)
 
-[简体中文](#) | [English](README_EN.md) | [📖 示例](examples/) | [ℹ️ 关于](ABOUT.md)
+[简体中文](#) | [English](README_EN.md) | [📖 文档导航](#-文档导航)
 
 </div>
 
 ---
 
-## ⚠️ 重要说明
-
-### 平台支持
-
-**CLI 工具 - codex (✅ 已发布)**:
-- ✅ **独立命令行工具**: 不依赖任何编辑器
-- ✅ **适用场景**: CI/CD、脚本自动化、一键生成索引
-- ✅ **多语言支持**: 10+ 编程语言 (JS/TS/Python/Java/Rust/Go...)
-- 📦 **安装方式**: `npm install && npm link`
-- 🔄 **工作原理**: 扫描项目 → 分析代码 → 生成索引
-- 📖 **文档**: [CLI README](cli/README.md) | [实现说明](CLI_IMPLEMENTATION.md)
-
-**Claude Code 插件**:
-- ✅ **完整支持**: https://claude.ai/code
-- ✅ **自动化**: 通过 Hook 系统自动更新索引
-- 📦 **安装位置**: `~/.claude/plugins/` (Claude Code 插件目录)
-
-**VSCode 系编辑器 - 完全自动化 (开发中)**:
-- 🚀 **VSCode Extension** (v1.0 开发中) - 真正的全自动化
-  - ✅ **VSCode**: 原生支持
-  - ✅ **Cursor**: 完全兼容 VSCode 扩展
-  - ✅ **Windsurf**: 基于 VSCode,支持扩展
-  - ✅ **Kiro**: 基于 Code OSS,支持 Open VSX 扩展
-  - 📦 **安装方式**: VSCode Marketplace / Open VSX Registry
-  - 🔄 **工作原理**: FileSystemWatcher 自动监听文件变化
-  - 📅 **预计发布**: 2026-01-10
-
-**当前可用方案 (过渡期)**:
-- 🔧 **Cursor**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/cursor-example/)
-- 🔧 **Windsurf**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/windsurf-example/)
-- 🔧 **Kiro**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/kiro-example/)
-
-**平台对比**:
-
-| 平台 | 自动化程度 | 适用场景 | 状态 |
-|------|-----------|---------|------|
-| **CLI 工具 (codex)** | 手动命令 | CI/CD, 批量处理 | ✅ 已发布 |
-| **Claude Code** | 完全自动 (Hook) | Claude Code 开发 | ✅ 已发布 |
-| **VSCode Extension** | 完全自动 (FileSystemWatcher) | VSCode 系编辑器 | 🚧 开发中 |
-| **规则文件方案** | 半自动 (提醒 AI) | Cursor/Windsurf/Kiro | ✅ 可用 |
-
-**相关文档**:
-- [CLI 工具说明](CLI_IMPLEMENTATION.md) - codex 实现细节
-- [VSCode 扩展计划](VSCODE_EXTENSION_PLAN.md) - VSCode Extension 技术方案
-- [开发路线图](IMPLEMENTATION_ROADMAP.md) - 整体开发进度
-
----
-
 ## 📖 核心理念
 
-**分形多级索引系统** - 一个可在多个 AI 编辑器平台使用的代码文档自动化系统:
-
-- 🏠 **Claude Code**: 完整自动化支持 (主平台)
-- 🔧 **Cursor/Windsurf/Kiro**: 半自动化支持 (实验性)
-
-这是一个三级分形文档系统，自动维护项目的索引和依赖关系：
+**三级分形文档系统** - 自动维护项目的索引和依赖关系：
 
 ```
 PROJECT_INDEX.md (根索引)
@@ -87,7 +34,7 @@ PROJECT_INDEX.md (根索引)
 
 每个文件夹/
   └─ FOLDER_INDEX.md (文件夹索引)
-       ├─ 3 行架构说明
+       ├─ 架构说明
        ├─ 文件清单
        └─ "本文件夹变化时，更新我"
 
@@ -105,487 +52,218 @@ PROJECT_INDEX.md (根索引)
 - **🪞 自指性**：每个文档都声明"当我变化时，更新我"
 - **🎼 复调性**：代码与文档相互呼应，局部影响整体
 
-### 🌍 v2.0 新特性
-
-- **完整国际化**: 支持中英文双语切换
-- **模块化架构**: SKILL.md 从 1098行 精简到 200行
-- **命令独立**: 每个命令都有详细实现文档
-- **新命令**: `/set-language` 快速切换语言
-- **多平台示例**: 提供 Cursor/Windsurf/Kiro 完整示例
-- **使用案例**: 8 个真实应用场景文档
-- **演示材料**: 完整的演示录制指南
-
 ---
 
 ## 🚀 快速开始
 
-### 方法 1: CLI 工具 `codex`（适用于所有平台）
+### 方法 1: CLI 工具 `codex`（推荐用于 CI/CD）
 
-**🎯 独立命令行工具** - 不依赖任何编辑器,适用于任何项目和 CI/CD:
-
-#### 安装
+**独立命令行工具** - 不依赖任何编辑器：
 
 ```bash
-# 1. 克隆仓库
+# 1. 克隆并安装
 git clone https://github.com/Claudate/project-multilevel-index.git
 cd project-multilevel-index/cli
+npm install && npm run build && npm link
 
-# 2. 安装依赖并编译
-npm install && npm run build
-
-# 3. 全局链接
-npm link
-
-# 4. 验证安装
-codex --help
-```
-
-#### 使用
-
-```bash
-# 初始化索引系统
+# 2. 使用
 cd /your/project
 codex init
-
-# 自定义选项
-codex init --max-depth 5 --max-nodes 30
 ```
 
-#### 功能特点
-
-- ✅ **多语言支持**: JavaScript/TypeScript、Python、Java、Rust、Go、C/C++、PHP、Ruby、Swift 等 10+ 种语言
-- ✅ **智能分析**: 使用 Babel AST 分析 JS/TS,其他语言使用正则表达式
-- ✅ **完整生成**: 文件头注释 + FOLDER_INDEX.md + PROJECT_INDEX.md + Mermaid 依赖图
-- ✅ **用户友好**: 彩色输出、进度条、清晰的错误提示
-- ✅ **CI/CD 就绪**: 可集成到自动化流程中
-
-#### 输出示例
-
+**输出示例**:
 ```
 🎼 Fractal Multi-level Index System
-
-Project root: /your/project
-
 ✔ Found 45 code files
-✔ Analyzed 45 files
 ✔ Generated 45 file headers
 ✔ Generated 8 folder indexes
 ✔ Generated PROJECT_INDEX.md
-
 ✅ Index system initialized successfully!
-
-📖 View the project index at: /your/project/PROJECT_INDEX.md
 ```
 
-📖 **完整文档**: [CLI README](cli/README.md) | [实现说明](CLI_IMPLEMENTATION.md)
+📖 [CLI完整文档](cli/README.md) | [实现说明](CLI_IMPLEMENTATION.md)
 
 ---
 
-### 方法 2: 从 Claude Code 市场安装（推荐用于 Claude Code）
+### 方法 2: Claude Code 插件（推荐用于 Claude Code）
 
-**最简单的方式** - 只需两行命令：
+**最简单的安装方式**：
 
 ```bash
 /plugin marketplace add Claudate/project-multilevel-index
 /plugin install project-multilevel-index
 ```
 
-完成！插件会自动下载到 `~/.claude/plugins/project-multilevel-index`
-
-**验证安装**:
-```bash
-/plugins list
-```
-
-应该看到 `project-multilevel-index` 已启用 ✅
-
----
-
-### 方法 3: 从 GitHub 手动安装（开发者）
-
-如果您需要修改插件源代码或参与开发：
+**使用**：
 
 ```bash
-git clone https://github.com/Claudate/project-multilevel-index.git
-cd project-multilevel-index
-
-# Windows (PowerShell)
-Copy-Item -Path . -Destination "$env:USERPROFILE\.claude\plugins\project-multilevel-index" -Recurse
-
-# macOS/Linux
-cp -r . ~/.claude/plugins/project-multilevel-index
-```
-
-**插件目录位置**：
-- Windows: `%USERPROFILE%\.claude\plugins\`
-- macOS/Linux: `~/.claude/plugins/`
-
-📖 **详细安装指南**: [INSTALL_GUIDE.md](INSTALL_GUIDE.md) | **5分钟上手**: [QUICKSTART.md](QUICKSTART.md)
-
----
-
-### 开始使用 - 初始化索引
-
-在您的项目根目录运行：
-
-```
+# 初始化索引
 /project-multilevel-index:init-index
+
+# 自动更新（Hook 自动触发，无需手动）
+# 修改代码文件后会自动更新索引
 ```
 
-> **⚠️ 重要**: 命令需要带插件命名空间前缀 `/project-multilevel-index:`，不是 `/init-index`
-
-Claude 会自动：
-1. 扫描项目中的所有代码文件
-2. 为每个文件添加 Input/Output/Pos 头注释
-3. 在每个文件夹生成 FOLDER_INDEX.md
-4. 在根目录生成 PROJECT_INDEX.md 和依赖关系图
-
-### 4. 自动更新
-
-启用后，每次修改代码文件时，索引会自动更新（通过 PostToolUse Hook）。
+📖 [安装指南](INSTALL_GUIDE.md) | [快速上手](QUICKSTART.md)
 
 ---
 
-## 📚 命令列表
+### 方法 3: VSCode 扩展（开发中）
 
-| 命令 | 功能 | 使用场景 |
-|------|------|---------|
-| `/project-multilevel-index:init-index` | 初始化索引系统 | 首次使用或重建索引 |
-| `/project-multilevel-index:update-index` | 手动更新索引 | 大量修改后同步索引 |
-| `/project-multilevel-index:check-index` | 一致性检查 | 验证索引完整性 |
-| `/project-multilevel-index:set-language` | 切换语言 | 切换中英文界面 |
+**完全自动化方案** - 预计 2026-01-10 发布
 
-> **💡 提示**: 所有命令都需要 `/project-multilevel-index:` 前缀（这是 Claude Code 插件的命名空间要求）
+支持平台：
+- ✅ VSCode
+- ✅ Cursor
+- ✅ Windsurf
+- ✅ Kiro
 
----
-
-## 💡 使用示例
-
-### 示例 1：初始化新项目
-
-```
-User: /project-multilevel-index:init-index
-
-Claude: 确认当前目录是 h:/my-project 吗？
-
-User: 是的
-
-Claude:
-正在扫描项目...
-发现:
-- TypeScript: 45 文件
-- Python: 12 文件
-
-正在生成索引...
-✅ 完成！
-
-已生成:
-- 57 个文件头注释
-- 8 个 FOLDER_INDEX.md
-- 1 个 PROJECT_INDEX.md
-- 依赖关系图包含 32 个节点
-
-请查看 PROJECT_INDEX.md 了解项目架构。
-```
-
-### 示例 2：自动更新
-
-当您修改文件时，索引会自动更新：
-
-```
-[您编辑 src/services/authService.ts，新增 import bcrypt]
-
-Claude (静默):
-检测到结构性变更
-→ 更新 authService.ts 文件头
-→ 更新 services/FOLDER_INDEX.md
-→ 更新 PROJECT_INDEX.md 依赖图
-
-[显示提示]
-[索引系统] 已自动更新 authService.ts 的索引
-```
-
-### 示例 3：检查一致性
-
-```
-User: /project-multilevel-index:check-index
-
-Claude:
-索引一致性检查报告
-==================
-
-✅ 文件头完整性: 55/57 (2 个文件缺少注释)
-  - src/utils/legacy.js
-  - src/temp/test.ts
-
-✅ 文件夹索引: 8/8 正常
-⚠️ 依赖关系: 发现 1 个循环依赖
-  - src/a.ts → src/b.ts → src/c.ts → src/a.ts
-✅ 索引结构: 符合规范
-
-建议:
-1. 运行 /project-multilevel-index:update-index 补充缺失注释
-2. 重构循环依赖
-```
+📖 [技术方案](VSCODE_EXTENSION_PLAN.md) | [开发进度](IMPLEMENTATION_ROADMAP.md)
 
 ---
 
-## 🎬 演示与案例
+## ⭐ 核心功能
 
-### 完整示例项目
+### 🤖 自动化索引
 
-我们提供了三个平台的完整示例项目，包含实际代码和配置：
+- ✅ **自动扫描**: 递归扫描项目中的所有代码文件
+- ✅ **智能分析**: 使用 AST 或正则分析依赖关系
+- ✅ **自动生成**: 文件头注释 + 文件夹索引 + 项目索引
+- ✅ **自动更新**: 文件修改时自动更新相关索引（Claude Code）
 
-- **[Cursor 示例](examples/cursor-example/)** - 完整的 TypeScript 项目示例
-- **[Windsurf 示例](examples/windsurf-example/)** - Windsurf 配置示例
-- **[Kiro 示例](examples/kiro-example/)** - Kiro 配置示例
+### 🌍 10+ 编程语言
 
-每个示例都包含：
-- ✅ 完整的项目结构（Controllers/Services/Models/Utils）
-- ✅ 配置好的规则文件
-- ✅ 已生成的索引文件（PROJECT_INDEX、FOLDER_INDEX、文件头注释）
-- ✅ 详细的 README 和使用说明
+JavaScript/TypeScript • Python • Java/Kotlin • Rust • Go
+C/C++ • PHP • Ruby • Swift • C#
 
-### 实际使用案例
+📖 [文件头示例](FILE_HEADERS.md)
 
-查看 **[USE_CASES.md](USE_CASES.md)** 了解 8 个真实场景的应用案例：
+### 📊 可视化依赖
 
-1. **开源项目文档维护** - 降低贡献门槛，文档同步率 100%
-2. **企业级微服务项目** - 架构可视化，发现循环依赖
-3. **个人学习项目** - 记录成长过程和架构演进
-4. **技术债务重构** - 可视化技术债，追踪重构进度
+```mermaid
+graph TB
+    Controllers -->|调用| Services
+    Services -->|使用| Models
+    Services -->|使用| Utils
+```
+
+自动生成 Mermaid 依赖关系图，支持：
+- GitHub
+- VSCode (Mermaid 扩展)
+- Obsidian
+- 任何 Markdown 查看器
+
+---
+
+## 📚 命令速查
+
+| 命令 | 功能 |
+|------|------|
+| [`init-index`](COMMANDS.md#1-init-index---初始化索引系统) | 初始化索引系统 |
+| [`update-index`](COMMANDS.md#2-update-index---更新索引) | 手动更新索引 |
+| [`check-index`](COMMANDS.md#3-check-index---一致性检查) | 一致性检查 |
+| [`set-language`](COMMANDS.md#4-set-language---切换语言) | 切换语言 |
+
+> **💡 提示**: Claude Code 命令需要前缀 `/project-multilevel-index:`
+
+📖 [命令详细说明](COMMANDS.md)
+
+---
+
+## 🎯 适用场景
+
+查看 **[USE_CASES.md](USE_CASES.md)** 了解 8 个真实应用场景：
+
+1. **开源项目文档维护** - 降低贡献门槛
+2. **企业级微服务项目** - 架构可视化
+3. **个人学习项目** - 记录成长过程
+4. **技术债务重构** - 追踪重构进度
 5. **API 设计评审** - 端点清单一目了然
-6. **多团队协作** - 避免重复开发，提升复用率
-7. **代码审查辅助** - 快速理解变更影响范围
+6. **多团队协作** - 避免重复开发
+7. **代码审查辅助** - 快速理解变更影响
 8. **技术文档生成** - 自动生成 API 文档
 
-### 演示视频（即将发布）
+---
 
-📹 **完整演示视频** - 2分钟快速了解核心功能
+## 🗺️ 平台支持
 
-<!-- 待录制后添加视频链接 -->
+| 平台 | 自动化程度 | 状态 | 文档 |
+|------|-----------|------|------|
+| **CLI 工具** | 手动命令 | ✅ 已发布 | [CLI README](cli/README.md) |
+| **Claude Code** | 完全自动 | ✅ 已发布 | [安装指南](INSTALL_GUIDE.md) |
+| **VSCode Extension** | 完全自动 | 🚧 开发中 | [技术方案](VSCODE_EXTENSION_PLAN.md) |
+| **规则文件方案** | 半自动 | ✅ 可用 | [Cursor](examples/cursor-example/) \| [Windsurf](examples/windsurf-example/) \| [Kiro](examples/kiro-example/) |
 
-**演示内容**：
-1. 初始化索引（30秒）
-2. 自动更新演示（30秒）
-3. 依赖关系可视化（30秒）
-4. 一致性检查（15秒）
-5. 国际化切换（15秒）
-
-参考 **[DEMO_SCRIPT.md](DEMO_SCRIPT.md)** 查看详细的演示脚本和录制指南。
+📖 [平台详细对比](PLATFORM_SUPPORT.md)
 
 ---
 
-## 🎨 文件头注释示例
+## 📖 文档导航
 
-### JavaScript/TypeScript
+### 快速开始
+- [安装指南](INSTALL_GUIDE.md) - 详细的安装步骤
+- [快速上手](QUICKSTART.md) - 5分钟快速上手
+- [使用示例](EXAMPLES.md) - 完整的使用示例
 
+### 核心文档
+- [命令参考](COMMANDS.md) - 所有命令的详细说明
+- [平台支持](PLATFORM_SUPPORT.md) - 各平台对比和选择建议
+- [文件头示例](FILE_HEADERS.md) - 10+ 种语言的文件头模板
+
+### 高级主题
+- [国际化指南](I18N_GUIDE.md) - 语言切换和配置
+- [使用案例](USE_CASES.md) - 8 个真实应用场景
+- [演示脚本](DEMO_SCRIPT.md) - 完整的演示录制指南
+
+### 开发者
+- [贡献指南](CONTRIBUTING.md) - 如何参与贡献
+- [CLI 实现说明](CLI_IMPLEMENTATION.md) - CLI 工具技术细节
+- [VSCode 扩展计划](VSCODE_EXTENSION_PLAN.md) - VSCode 扩展技术方案
+- [开发路线图](IMPLEMENTATION_ROADMAP.md) - 整体开发进度
+
+---
+
+## 📝 文件头注释示例
+
+### TypeScript
 ```typescript
 /**
- * Input: express, bcrypt, ./models/User, ./middleware/auth
- * Output: router (Express Router), POST /login, POST /register
+ * Input: express, bcrypt, ./models/User
+ * Output: router, POST /login, POST /register
  * Pos: API层-认证路由，处理用户登录注册
  *
  * 本注释在文件修改时自动更新
  */
-
-import express from 'express';
-import bcrypt from 'bcrypt';
-// ...
 ```
 
 ### Python
-
 ```python
 """
-Input: flask, sqlalchemy, .models.User, .schemas.UserSchema
+Input: flask, sqlalchemy, .models.User
 Output: UserController 类, /api/users 路由
-Pos: API层-用户控制器，处理用户 HTTP 请求
+Pos: API层-用户控制器，处理用户HTTP请求
 
 本注释在文件修改时自动更新
 """
-
-from flask import Blueprint
-# ...
 ```
 
-### Rust
-
-```rust
-//! Input: actix_web, sqlx, crate::models::User
-//! Output: pub fn configure_routes(), pub async fn get_users()
-//! Pos: API层-用户路由处理器
-//!
-//! 本注释在文件修改时自动更新
-
-use actix_web::{web, HttpResponse};
-// ...
-```
-
-更多语言模板见 [skills/project-multilevel-index/templates/](skills/project-multilevel-index/templates/)
+📖 [查看所有语言示例](FILE_HEADERS.md)
 
 ---
 
-## 🧩 支持的语言
+## 🎬 完整示例项目
 
-- ✅ JavaScript / TypeScript
-- ✅ Python
-- ✅ Java / Kotlin
-- ✅ Rust
-- ✅ Go
-- ✅ C / C++
-- ✅ PHP (Laravel / Plain PHP)
-- ✅ Ruby (Rails / Sinatra)
-- ✅ Swift (SwiftUI / UIKit)
-- ✅ C# (.NET / ASP.NET Core)
+我们提供了三个平台的完整示例项目，包含实际代码和配置：
 
-**总计 10 种主流编程语言！**
+- **[Cursor 示例](examples/cursor-example/)** - 完整的 TypeScript 项目
+- **[Windsurf 示例](examples/windsurf-example/)** - Windsurf 配置
+- **[Kiro 示例](examples/kiro-example/)** - Kiro 配置
 
----
-
-## ⚙️ 配置
-
-### 自定义排除规则
-
-创建 `.claude/index-config.json`:
-
-```json
-{
-  "exclude": {
-    "patterns": [
-      "**/node_modules/**",
-      "**/.git/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/custom-folder/**"
-    ],
-    "useGitignore": true
-  },
-  "index": {
-    "autoUpdate": true,
-    "maxDepth": 5,
-    "minFilesForFolder": 2
-  },
-  "visualization": {
-    "maxNodes": 50,
-    "groupByFolder": true,
-    "showLabels": true
-  }
-}
-```
-
-### 禁用自动更新
-
-编辑 `hooks/hooks.json`，移除 `PostToolUse` Hook 配置。
-
----
-
-## 🔍 工作原理
-
-### 自动更新流程
-
-```
-用户修改文件
-    ↓
-PostToolUse Hook 触发
-    ↓
-SKILL.md 中的逻辑判断
-    ↓
-是否为代码文件？→ 否 → 跳过
-    ↓ 是
-是否为索引文件？→ 是 → 跳过（防止循环）
-    ↓ 否
-是否为结构性变更？→ 否 → 跳过
-    ↓ 是
-执行级联更新
-    ├─ 更新文件头注释
-    ├─ 更新 FOLDER_INDEX.md
-    └─ 更新 PROJECT_INDEX.md
-```
-
-### 智能判断
-
-| 变更内容 | 是否更新 |
-|---------|---------|
-| 新增/删除 import | ✅ 是 |
-| 修改函数签名 | ✅ 是 |
-| 新增/删除 export | ✅ 是 |
-| 函数内部实现 | ❌ 否 |
-| 注释修改 | ❌ 否（除文件头） |
-| 格式化代码 | ❌ 否 |
-
----
-
-## 📊 依赖关系图示例
-
-生成的 Mermaid 图可在 GitHub、VSCode、Obsidian 等工具中渲染：
-
-```mermaid
-graph TB
-  subgraph Controllers
-    UserCtrl[userController.ts]
-    AuthCtrl[authController.ts]
-  end
-
-  subgraph Services
-    UserSvc[userService.ts]
-    AuthSvc[authService.ts]
-  end
-
-  subgraph Models
-    UserModel[User.ts]
-  end
-
-  UserCtrl -->|调用| UserSvc
-  AuthCtrl -->|调用| AuthSvc
-  UserSvc -->|使用| UserModel
-  AuthSvc -->|使用| UserModel
-
-  style UserSvc fill:#9cf
-  style AuthSvc fill:#9cf
-  style UserModel fill:#fc9
-```
-
----
-
-## 🛠️ 故障排除
-
-### 问题 1: 索引未自动更新
-
-**检查**：
-1. Hook 是否已启用？查看 `hooks/hooks.json`
-2. 修改的是否为代码文件？
-3. 是否为结构性变更？（仅修改函数内部不会触发）
-
-**解决**：手动运行 `/project-multilevel-index:update-index`
-
-### 问题 2: 文件头注释格式不对
-
-**原因**：可能是语言检测错误或文件已有非标准注释
-
-**解决**：
-1. 查看 `templates/` 目录下的标准模板
-2. 手动调整文件头格式
-3. 运行 `/project-multilevel-index:update-index` 重新生成
-
-### 问题 3: 依赖图过于复杂
-
-**解决**：
-1. 在配置中设置 `maxNodes: 30`（减少节点数）
-2. 使用文件夹级别聚合视图
-3. 手动编辑 PROJECT_INDEX.md，隐藏不重要的模块
-
----
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-改进建议：
-- [ ] 支持更多编程语言
-- [ ] 自定义文件头模板
-- [ ] 图形化依赖分析
-- [ ] 与 IDE 集成（VSCode 扩展）
+每个示例包含：
+- ✅ 完整项目结构（Controllers/Services/Models/Utils）
+- ✅ 配置好的规则文件
+- ✅ 已生成的索引文件
+- ✅ 详细使用说明
 
 ---
 
@@ -593,7 +271,7 @@ graph TB
 
 ### 微信交流群
 
-扫描二维码加入微信群,与其他用户交流使用经验:
+扫描二维码加入微信群，与其他用户交流使用经验：
 
 <div align="center">
 
@@ -601,13 +279,26 @@ graph TB
 
 </div>
 
-查看更多社区资源: [COMMUNITY.md](COMMUNITY.md)
+📖 [更多社区资源](COMMUNITY.md)
 
 ### GitHub
 
-- 📋 [Issues](https://github.com/Claudate/project-multilevel-index/issues) - 报告问题和功能建议
-- 💬 [Discussions](https://github.com/Claudate/project-multilevel-index/discussions) - 讨论和交流
+- 📋 [Issues](https://github.com/Claudate/project-multilevel-index/issues) - 报告问题
+- 💬 [Discussions](https://github.com/Claudate/project-multilevel-index/discussions) - 讨论交流
 - 🤝 [Contributing](CONTRIBUTING.md) - 贡献指南
+
+---
+
+## 🎓 灵感来源
+
+受道格拉斯·霍夫施塔特《哥德尔、埃舍尔、巴赫：集异璧之大成》启发：
+
+- **自指性**: 文档指向自己，声明"更新我"
+- **递归性**: 索引的索引的索引...
+- **怪圈**: 代码→文档→代码的无限循环
+- **分形**: 每个层级都是整体的缩影
+
+**让代码项目如赋格曲般，自我指涉、自我维护、优雅和谐。** 🎼
 
 ---
 
@@ -617,24 +308,10 @@ MIT License - 自由使用、修改和分发
 
 ---
 
-## 🎓 灵感来源
-
-本插件受道格拉斯·霍夫施塔特的《哥德尔、埃舍尔、巴赫：集异璧之大成》启发，实现了：
-
-- **自指性**：文档指向自己，声明"更新我"
-- **递归性**：索引的索引的索引...
-- **怪圈**：代码→文档→代码的无限循环
-- **分形**：每个层级都是整体的缩影
-
-**让代码项目如赋格曲般，自我指涉、自我完善、优雅和谐。**
-
----
-
-## 📞 联系方式
-
-- GitHub Issues: 提交 Bug 和功能请求
-- Email: 技术问题和合作咨询
-
----
+<div align="center">
 
 **开始使用 `/project-multilevel-index:init-index`，体验分形文档系统的魅力！** 🚀
+
+[⬆️ 返回顶部](#项目多级索引系统-project-multi-level-index)
+
+</div>
