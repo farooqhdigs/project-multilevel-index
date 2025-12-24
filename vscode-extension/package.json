@@ -1,0 +1,138 @@
+{
+  "name": "project-multilevel-index",
+  "displayName": "Project Multilevel Index",
+  "description": "Fractal self-referential documentation system - Auto-maintains code indexes, file headers & dependency graphs",
+  "version": "0.1.0",
+  "publisher": "Claudate",
+  "author": {
+    "name": "Claudate",
+    "url": "https://github.com/Claudate"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Claudate/project-multilevel-index.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Claudate/project-multilevel-index/issues"
+  },
+  "homepage": "https://github.com/Claudate/project-multilevel-index#readme",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages",
+    "Formatters"
+  ],
+  "keywords": [
+    "documentation",
+    "index",
+    "dependency-graph",
+    "auto-documentation",
+    "fractal",
+    "code-organization",
+    "project-structure"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "project-multilevel-index.init",
+        "title": "Initialize Index System",
+        "category": "Project Index"
+      },
+      {
+        "command": "project-multilevel-index.update",
+        "title": "Update All Indexes",
+        "category": "Project Index"
+      },
+      {
+        "command": "project-multilevel-index.check",
+        "title": "Check Index Consistency",
+        "category": "Project Index"
+      },
+      {
+        "command": "project-multilevel-index.toggleAutoUpdate",
+        "title": "Toggle Auto Update",
+        "category": "Project Index"
+      }
+    ],
+    "configuration": {
+      "title": "Project Multilevel Index",
+      "properties": {
+        "projectMultilevelIndex.autoUpdate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically update indexes on file changes"
+        },
+        "projectMultilevelIndex.exclude.patterns": {
+          "type": "array",
+          "default": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/.next/**",
+            "**/target/**"
+          ],
+          "description": "File patterns to exclude from indexing"
+        },
+        "projectMultilevelIndex.exclude.useGitignore": {
+          "type": "boolean",
+          "default": true,
+          "description": "Respect .gitignore patterns"
+        },
+        "projectMultilevelIndex.index.maxDepth": {
+          "type": "number",
+          "default": 5,
+          "description": "Maximum folder depth to scan"
+        },
+        "projectMultilevelIndex.visualization.maxNodes": {
+          "type": "number",
+          "default": 50,
+          "description": "Maximum nodes in dependency graph"
+        },
+        "projectMultilevelIndex.notifications.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notifications when indexes are updated"
+        },
+        "projectMultilevelIndex.notifications.showOnMinorChange": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show notifications for minor updates"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
+    "watch": "npm run build -- --watch",
+    "test": "vitest",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "esbuild": "^0.19.10",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0",
+    "@vscode/test-electron": "^2.3.8"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.23.6",
+    "@babel/traverse": "^7.23.6",
+    "@babel/types": "^7.23.6"
+  }
+}
