@@ -24,10 +24,12 @@ Claude Code (Full Auto) + Cursor/Windsurf/Kiro (Semi-Auto)
 
 ## 🎯 What is This?
 
-**Fractal Multi-level Index System** - A code documentation automation system usable across multiple AI editor platforms:
+**Fractal Multi-level Index System** - A code documentation automation system with multiple deployment options:
 
-- 🏠 **Claude Code**: Full automation support (primary platform)
-- 🔧 **Cursor/Windsurf/Kiro**: Semi-automatic support (experimental)
+- 🎯 **CLI Tool (codex)**: Standalone command-line tool (✅ Released)
+- 🏠 **Claude Code Plugin**: Full automation via Hook system (✅ Released)
+- 🚀 **VSCode Extension**: Full automation via FileSystemWatcher (🚧 In Development)
+- 🔧 **Rules-based**: Semi-automatic for Cursor/Windsurf/Kiro (✅ Available)
 
 This system automatically maintains a three-level fractal documentation structure for your codebase:
 
@@ -71,17 +73,69 @@ Each File
 
 ## ⚡ Quick Start
 
-### Prerequisites
+### Method 1: CLI Tool `codex` (Works Everywhere)
 
-**You must have Claude Code installed first!**
+**🎯 Standalone command-line tool** - Works independently of any editor, perfect for CI/CD:
 
-- Download: https://claude.ai/code
-- This is a **Claude Code plugin**, not a standalone tool
-- Does NOT work with Cursor, Windsurf, or VSCode (yet)
+#### Installation
+
+```bash
+# 1. Clone repository
+git clone https://github.com/Claudate/project-multilevel-index.git
+cd project-multilevel-index/cli
+
+# 2. Install dependencies and build
+npm install && npm run build
+
+# 3. Link globally
+npm link
+
+# 4. Verify installation
+codex --help
+```
+
+#### Usage
+
+```bash
+# Initialize index system
+cd /your/project
+codex init
+
+# Custom options
+codex init --max-depth 5 --max-nodes 30
+```
+
+#### Features
+
+- ✅ **10+ Languages**: JavaScript/TypeScript, Python, Java, Rust, Go, C/C++, PHP, Ruby, Swift
+- ✅ **Smart Analysis**: Babel AST for JS/TS, regex for other languages
+- ✅ **Complete Generation**: File headers + FOLDER_INDEX.md + PROJECT_INDEX.md + Mermaid graph
+- ✅ **User-Friendly**: Colorful output, progress bars, clear error messages
+- ✅ **CI/CD Ready**: Easy integration into automation workflows
+
+#### Output Example
+
+```
+🎼 Fractal Multi-level Index System
+
+Project root: /your/project
+
+✔ Found 45 code files
+✔ Analyzed 45 files
+✔ Generated 45 file headers
+✔ Generated 8 folder indexes
+✔ Generated PROJECT_INDEX.md
+
+✅ Index system initialized successfully!
+
+📖 View the project index at: /your/project/PROJECT_INDEX.md
+```
+
+📖 **Full Documentation**: [CLI README](cli/README.md) | [Implementation Details](CLI_IMPLEMENTATION.md)
 
 ---
 
-### Method 1: Install from Claude Code Marketplace (Recommended)
+### Method 2: Claude Code Marketplace (For Claude Code Users)
 
 **The easiest way** - just two commands:
 
@@ -101,7 +155,7 @@ You should see `project-multilevel-index` enabled ✅
 
 ---
 
-### Method 2: Manual Installation from GitHub (For Developers)
+### Method 3: Manual Installation from GitHub (For Developers)
 
 If you need to modify the plugin source code or contribute:
 

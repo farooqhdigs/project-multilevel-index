@@ -26,7 +26,15 @@ Claude Code (完全自动) + VSCode/Cursor/Windsurf/Kiro (完全自动 - 即将�
 
 ### 平台支持
 
-**主平台 - Claude Code**:
+**CLI 工具 - codex (✅ 已发布)**:
+- ✅ **独立命令行工具**: 不依赖任何编辑器
+- ✅ **适用场景**: CI/CD、脚本自动化、一键生成索引
+- ✅ **多语言支持**: 10+ 编程语言 (JS/TS/Python/Java/Rust/Go...)
+- 📦 **安装方式**: `npm install && npm link`
+- 🔄 **工作原理**: 扫描项目 → 分析代码 → 生成索引
+- 📖 **文档**: [CLI README](cli/README.md) | [实现说明](CLI_IMPLEMENTATION.md)
+
+**Claude Code 插件**:
 - ✅ **完整支持**: https://claude.ai/code
 - ✅ **自动化**: 通过 Hook 系统自动更新索引
 - 📦 **安装位置**: `~/.claude/plugins/` (Claude Code 插件目录)
@@ -46,12 +54,19 @@ Claude Code (完全自动) + VSCode/Cursor/Windsurf/Kiro (完全自动 - 即将�
 - 🔧 **Windsurf**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/windsurf-example/)
 - 🔧 **Kiro**: 半自动支持 (需手动提醒 AI) - [查看示例](examples/kiro-example/)
 
-**说明**:
-- **Claude Code**: 完全自动化 (通过 Hook 系统) ✅ 已发布
-- **VSCode Extension**: 完全自动化 (通过 FileSystemWatcher) 🚧 开发中
-- **规则文件方案**: 半自动化 (过渡方案,VSCode 扩展发布后仍可使用)
-- 详见 [VSCODE_EXTENSION_PLAN.md](VSCODE_EXTENSION_PLAN.md) 了解技术方案
-- 详见 [IMPLEMENTATION_ROADMAP.md](IMPLEMENTATION_ROADMAP.md) 了解开发进度
+**平台对比**:
+
+| 平台 | 自动化程度 | 适用场景 | 状态 |
+|------|-----------|---------|------|
+| **CLI 工具 (codex)** | 手动命令 | CI/CD, 批量处理 | ✅ 已发布 |
+| **Claude Code** | 完全自动 (Hook) | Claude Code 开发 | ✅ 已发布 |
+| **VSCode Extension** | 完全自动 (FileSystemWatcher) | VSCode 系编辑器 | 🚧 开发中 |
+| **规则文件方案** | 半自动 (提醒 AI) | Cursor/Windsurf/Kiro | ✅ 可用 |
+
+**相关文档**:
+- [CLI 工具说明](CLI_IMPLEMENTATION.md) - codex 实现细节
+- [VSCode 扩展计划](VSCODE_EXTENSION_PLAN.md) - VSCode Extension 技术方案
+- [开发路线图](IMPLEMENTATION_ROADMAP.md) - 整体开发进度
 
 ---
 
@@ -104,22 +119,65 @@ PROJECT_INDEX.md (根索引)
 
 ## 🚀 快速开始
 
-### 方法 1: CLI 工具（适用于所有平台）
+### 方法 1: CLI 工具 `codex`（适用于所有平台）
 
-**独立命令行工具** - 适用于任何项目和 CI/CD:
+**🎯 独立命令行工具** - 不依赖任何编辑器,适用于任何项目和 CI/CD:
+
+#### 安装
 
 ```bash
-# 从源码安装
+# 1. 克隆仓库
 git clone https://github.com/Claudate/project-multilevel-index.git
 cd project-multilevel-index/cli
-npm install && npm run build && npm link
 
-# 在项目中使用
-cd /your/project
-codex init
+# 2. 安装依赖并编译
+npm install && npm run build
+
+# 3. 全局链接
+npm link
+
+# 4. 验证安装
+codex --help
 ```
 
-查看 **[CLI 文档](cli/README.md)** 了解更多用法。
+#### 使用
+
+```bash
+# 初始化索引系统
+cd /your/project
+codex init
+
+# 自定义选项
+codex init --max-depth 5 --max-nodes 30
+```
+
+#### 功能特点
+
+- ✅ **多语言支持**: JavaScript/TypeScript、Python、Java、Rust、Go、C/C++、PHP、Ruby、Swift 等 10+ 种语言
+- ✅ **智能分析**: 使用 Babel AST 分析 JS/TS,其他语言使用正则表达式
+- ✅ **完整生成**: 文件头注释 + FOLDER_INDEX.md + PROJECT_INDEX.md + Mermaid 依赖图
+- ✅ **用户友好**: 彩色输出、进度条、清晰的错误提示
+- ✅ **CI/CD 就绪**: 可集成到自动化流程中
+
+#### 输出示例
+
+```
+🎼 Fractal Multi-level Index System
+
+Project root: /your/project
+
+✔ Found 45 code files
+✔ Analyzed 45 files
+✔ Generated 45 file headers
+✔ Generated 8 folder indexes
+✔ Generated PROJECT_INDEX.md
+
+✅ Index system initialized successfully!
+
+📖 View the project index at: /your/project/PROJECT_INDEX.md
+```
+
+📖 **完整文档**: [CLI README](cli/README.md) | [实现说明](CLI_IMPLEMENTATION.md)
 
 ---
 
