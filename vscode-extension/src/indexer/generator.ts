@@ -61,7 +61,7 @@ export class Generator {
   }
 
   /**
-   * Generate /* */ style comment (JS/TS/Java/C#/Swift)
+   * Generate block comment style (JS/TS/Java/C#/Swift)
    */
   private generateBlockComment(inputs: string, outputs: string, position: string): string {
     return `/**

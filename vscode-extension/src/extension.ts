@@ -4,6 +4,8 @@
  */
 
 import * as vscode from 'vscode';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { FileWatcher } from './watcher/fileWatcher';
 import { Updater } from './indexer/updater';
 import { Config } from './core/config';
@@ -231,8 +233,51 @@ async function handleConfigurationChange(workspaceRoot: string, oldConfig: any) 
  */
 async function initializeIndex(workspaceRoot: string, updater: Updater): Promise<void> {
   logger.info('Initializing index system...');
-  // TODO: Implement full initialization logic
-  logger.info('Index system initialized');
+
+  try {
+    // 1. Get all code files in the project
+    const allFiles = await getAllCodeFilesRecursive(workspaceRoot);
+    logger.info(`Found ${allFiles.length} code files`);
+
+    // 2. Update all file headers
+    let headersUpdated = 0;
+    for (const uri of allFiles) {
+      try {
+        const analysis = await updater.analyzer.analyzeFile(uri);
+        await updater.updateFileHeader(uri, analysis);
+        headersUpdated++;
+      } catch (error) {
+        logger.warn(`Failed to update header for ${uri.fsPath}:`, error);
+      }
+    }
+    logger.info(`Updated ${headersUpdated} file headers`);
+
+    // 3. Get all folders
+    const folders = await getAllFoldersWithCode(workspaceRoot);
+    logger.info(`Found ${folders.size} folders with code`);
+
+    // 4. Update all FOLDER_INDEX.md files
+    let foldersUpdated = 0;
+    for (const folderPath of folders.keys()) {
+      try {
+        const folderUri = vscode.Uri.file(folderPath);
+        await updater.updateFolderIndex(folderUri);
+        foldersUpdated++;
+      } catch (error) {
+        logger.warn(`Failed to update folder index for ${folderPath}:`, error);
+      }
+    }
+    logger.info(`Updated ${foldersUpdated} folder indexes`);
+
+    // 5. Update PROJECT_INDEX.md
+    await updater.updateProjectIndex(workspaceRoot);
+    logger.info('Updated project index');
+
+    logger.info('✅ Index system initialized successfully');
+  } catch (error) {
+    logger.error('Failed to initialize index system:', error);
+    throw error;
+  }
 }
 
 /**
@@ -240,8 +285,29 @@ async function initializeIndex(workspaceRoot: string, updater: Updater): Promise
  */
 async function updateAllIndexes(workspaceRoot: string, updater: Updater): Promise<void> {
   logger.info('Updating all indexes...');
-  // TODO: Implement update all logic
-  logger.info('All indexes updated');
+
+  try {
+    // Get all folders with code
+    const folders = await getAllFoldersWithCode(workspaceRoot);
+
+    // Update all folder indexes
+    for (const folderPath of folders.keys()) {
+      try {
+        const folderUri = vscode.Uri.file(folderPath);
+        await updater.updateFolderIndex(folderUri);
+      } catch (error) {
+        logger.warn(`Failed to update folder index for ${folderPath}:`, error);
+      }
+    }
+
+    // Update project index
+    await updater.updateProjectIndex(workspaceRoot);
+
+    logger.info('✅ All indexes updated successfully');
+  } catch (error) {
+    logger.error('Failed to update all indexes:', error);
+    throw error;
+  }
 }
 
 /**
@@ -249,6 +315,172 @@ async function updateAllIndexes(workspaceRoot: string, updater: Updater): Promis
  */
 async function checkIndexConsistency(workspaceRoot: string): Promise<void> {
   logger.info('Checking index consistency...');
-  // TODO: Implement consistency check logic
-  logger.info('Consistency check complete');
+
+  try {
+    const issues: string[] = [];
+
+    // 1. Check if PROJECT_INDEX.md exists
+    const projectIndexPath = path.join(workspaceRoot, 'PROJECT_INDEX.md');
+    try {
+      await fs.access(projectIndexPath);
+    } catch {
+      issues.push('❌ PROJECT_INDEX.md not found');
+    }
+
+    // 2. Check all folders for FOLDER_INDEX.md
+    const folders = await getAllFoldersWithCode(workspaceRoot);
+    let missingFolderIndexes = 0;
+    for (const folderPath of folders.keys()) {
+      const folderIndexPath = path.join(folderPath, 'FOLDER_INDEX.md');
+      try {
+        await fs.access(folderIndexPath);
+      } catch {
+        missingFolderIndexes++;
+      }
+    }
+    if (missingFolderIndexes > 0) {
+      issues.push(`⚠️  ${missingFolderIndexes} folders missing FOLDER_INDEX.md`);
+    }
+
+    // 3. Check all code files for headers
+    const allFiles = await getAllCodeFilesRecursive(workspaceRoot);
+    let filesWithoutHeaders = 0;
+    for (const uri of allFiles) {
+      try {
+        const content = await fs.readFile(uri.fsPath, 'utf8');
+        const hasHeader = /^(\/\*\*|"""|\/\/!)[\s\S]*?(Input:|Output:|Pos:)/.test(content.substring(0, 500));
+        if (!hasHeader) {
+          filesWithoutHeaders++;
+        }
+      } catch (error) {
+        logger.warn(`Failed to check header for ${uri.fsPath}:`, error);
+      }
+    }
+    if (filesWithoutHeaders > 0) {
+      issues.push(`⚠️  ${filesWithoutHeaders} files missing headers`);
+    }
+
+    // Show results
+    if (issues.length === 0) {
+      vscode.window.showInformationMessage('✅ Index system is consistent!');
+    } else {
+      const message = `Index consistency check:\n${issues.join('\n')}`;
+      vscode.window.showWarningMessage(message, 'Fix Issues').then((selection) => {
+        if (selection === 'Fix Issues') {
+          vscode.commands.executeCommand('project-multilevel-index.init');
+        }
+      });
+    }
+
+    logger.info('Consistency check complete');
+  } catch (error) {
+    logger.error('Failed to check index consistency:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get all code files recursively
+ */
+async function getAllCodeFilesRecursive(workspaceRoot: string): Promise<vscode.Uri[]> {
+  const files: vscode.Uri[] = [];
+  const codeExts = ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.kt', '.rs', '.go', '.cpp', '.c', '.h', '.hpp', '.php', '.rb', '.swift', '.cs'];
+
+  async function scanDir(dir: string, depth: number = 0): Promise<void> {
+    if (depth > 5) return;
+
+    try {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+
+        if (shouldSkipFolder(entry.name)) {
+          continue;
+        }
+
+        if (entry.isDirectory()) {
+          await scanDir(fullPath, depth + 1);
+        } else if (entry.isFile()) {
+          const ext = path.extname(entry.name);
+          if (codeExts.includes(ext)) {
+            files.push(vscode.Uri.file(fullPath));
+          }
+        }
+      }
+    } catch (error) {
+      // Ignore permission errors
+    }
+  }
+
+  await scanDir(workspaceRoot);
+  return files;
+}
+
+/**
+ * Get all folders containing code files
+ */
+async function getAllFoldersWithCode(workspaceRoot: string): Promise<Map<string, number>> {
+  const folders = new Map<string, number>();
+  const codeExts = ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.kt', '.rs', '.go', '.cpp', '.c', '.h', '.hpp', '.php', '.rb', '.swift', '.cs'];
+
+  async function scanDir(dir: string, depth: number = 0): Promise<void> {
+    if (depth > 5) return;
+
+    try {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      let fileCount = 0;
+
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+
+        if (shouldSkipFolder(entry.name)) {
+          continue;
+        }
+
+        if (entry.isDirectory()) {
+          await scanDir(fullPath, depth + 1);
+        } else if (entry.isFile()) {
+          const ext = path.extname(entry.name);
+          if (codeExts.includes(ext)) {
+            fileCount++;
+          }
+        }
+      }
+
+      if (fileCount > 0) {
+        folders.set(dir, fileCount);
+      }
+    } catch (error) {
+      // Ignore permission errors
+    }
+  }
+
+  await scanDir(workspaceRoot);
+  return folders;
+}
+
+/**
+ * Check if folder should be skipped
+ */
+function shouldSkipFolder(folderName: string): boolean {
+  const skipFolders = [
+    'node_modules',
+    '.git',
+    'dist',
+    'build',
+    '.next',
+    'target',
+    'vendor',
+    '__pycache__',
+    '.cache',
+    'coverage',
+    '.turbo',
+    '.venv',
+    'venv',
+    '.vscode',
+    '.idea'
+  ];
+
+  return skipFolders.includes(folderName);
 }

@@ -10,7 +10,7 @@ import { Analyzer, FileAnalysis } from './analyzer';
 import { Generator } from './generator';
 
 export class Updater {
-  private analyzer: Analyzer;
+  public analyzer: Analyzer;
   private generator: Generator;
 
   constructor(private logger: Logger) {
