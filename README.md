@@ -161,14 +161,14 @@ graph TB
 
 | 命令 | 功能 |
 |------|------|
-| [`init-index`](COMMANDS.md#1-init-index---初始化索引系统) | 初始化索引系统 |
-| [`update-index`](COMMANDS.md#2-update-index---更新索引) | 手动更新索引 |
-| [`check-index`](COMMANDS.md#3-check-index---一致性检查) | 一致性检查 |
-| [`set-language`](COMMANDS.md#4-set-language---切换语言) | 切换语言 |
+| [`init-index`](docs/user-guide/COMMANDS.md#1-init-index---初始化索引系统) | 初始化索引系统 |
+| [`update-index`](docs/user-guide/COMMANDS.md#2-update-index---更新索引) | 手动更新索引 |
+| [`check-index`](docs/user-guide/COMMANDS.md#3-check-index---一致性检查) | 一致性检查 |
+| [`set-language`](docs/user-guide/COMMANDS.md#4-set-language---切换语言) | 切换语言 |
 
 > **💡 提示**: Claude Code 命令需要前缀 `/project-multilevel-index:`
 
-📖 [命令详细说明](COMMANDS.md)
+📖 [命令详细说明](docs/user-guide/COMMANDS.md)
 
 ---
 
